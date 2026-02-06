@@ -7,15 +7,16 @@ import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import MegaMenu from './MegaMenu';
 import { useAuth } from '@/hooks/useAuth';
+import { useCart } from '@/contexts/CartContext';
 
 const Header = () => {
   const navigate = useNavigate();
   const { user, profile, signOut, isAuthenticated } = useAuth();
+  const { itemCount } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [cartCount] = useState(0);
 
   const handleSignOut = async () => {
     await signOut();
@@ -204,22 +205,24 @@ const Header = () => {
               )}
 
               {/* Cart */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className={`h-10 w-10 rounded-xl relative transition-all duration-300 ${
-                  isScrolled 
-                    ? 'hover:bg-primary/5 text-foreground' 
-                    : 'hover:bg-white/10 text-white'
-                }`}
-              >
-                <ShoppingCart className="h-5 w-5" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-accent text-accent-foreground text-xs flex items-center justify-center font-medium">
-                    {cartCount}
-                  </span>
-                )}
-              </Button>
+              <Link to="/panier">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={`h-10 w-10 rounded-xl relative transition-all duration-300 ${
+                    isScrolled 
+                      ? 'hover:bg-primary/5 text-foreground' 
+                      : 'hover:bg-white/10 text-white'
+                  }`}
+                >
+                  <ShoppingCart className="h-5 w-5" />
+                  {itemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-accent text-accent-foreground text-xs flex items-center justify-center font-medium">
+                      {itemCount > 99 ? '99+' : itemCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
 
               {/* Mobile Menu Toggle */}
               <Button

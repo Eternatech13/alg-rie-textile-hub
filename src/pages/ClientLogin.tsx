@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Loader2, AlertCircle, Clock } from 'lucide-react';
+import { Eye, EyeOff, Loader2, AlertCircle, Clock, Info } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,11 +27,16 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 const ClientLogin = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const { signIn, isAuthenticated, isCcpValidated, profile, loading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCcpPending, setShowCcpPending] = useState(false);
+
+  // Get return URL from state or session storage
+  const returnUrl = location.state?.returnUrl || sessionStorage.getItem('checkout_return_url') || '/';
+  const returnMessage = location.state?.message;
 
   const {
     register,
@@ -52,11 +57,13 @@ const ClientLogin = () => {
     if (isAuthenticated && profile) {
       if (!profile.ccp_validated) {
         setShowCcpPending(true);
-      } else {
-        navigate('/');
       }
+      // Clear the session storage return URL after successful login
+      sessionStorage.removeItem('checkout_return_url');
+      // Navigate to return URL
+      navigate(returnUrl, { replace: true });
     }
-  }, [isAuthenticated, profile, navigate]);
+  }, [isAuthenticated, profile, navigate, returnUrl]);
 
   const onSubmit = async (data: LoginFormData) => {
     setIsSubmitting(true);
@@ -125,6 +132,22 @@ const ClientLogin = () => {
                 Accédez à votre espace Sallate Bladi
               </p>
             </div>
+
+            {/* Return Message Alert */}
+            {returnMessage && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6"
+              >
+                <Alert className="border-primary/30 bg-primary/5">
+                  <Info className="h-4 w-4 text-primary" />
+                  <AlertDescription className="text-foreground">
+                    {returnMessage}
+                  </AlertDescription>
+                </Alert>
+              </motion.div>
+            )}
 
             {/* CCP Pending Alert */}
             {showCcpPending && (
