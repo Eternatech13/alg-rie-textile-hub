@@ -513,3 +513,7 @@ export const filterCompanies = (
     return true;
   });
 };
+
+export const getTextileCompanyById = (id: string): TextileCompany | undefined => {
+  return mockTextileCompanies.find(company => company.id === id);
+};
