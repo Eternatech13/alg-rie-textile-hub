@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ShoppingCart, User, Menu, X, ChevronDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import MegaMenu from './MegaMenu';
@@ -22,6 +23,7 @@ const Header = () => {
 
   const navLinks = [
     { label: 'Accueil', href: '/' },
+    { label: 'Catalogue', href: '/catalogue' },
     { label: 'Sociétés textiles', href: '/societes-textiles' },
     { label: 'Toutes catégories', href: '#', hasMegaMenu: true },
     { label: 'À propos', href: '/a-propos' }
@@ -41,7 +43,7 @@ const Header = () => {
         <div className="section-container">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <a href="/" className="flex items-center gap-3 group">
+            <Link to="/" className="flex items-center gap-3 group">
               <motion.div 
                 whileHover={{ scale: 1.05, rotate: 5 }}
                 transition={{ type: "spring", stiffness: 400 }}
@@ -60,7 +62,7 @@ const Header = () => {
               }`}>
                 Salaate Bladi
               </span>
-            </a>
+            </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-1">
@@ -71,17 +73,29 @@ const Header = () => {
                   onMouseEnter={() => link.hasMegaMenu && setIsMegaMenuOpen(true)}
                   onMouseLeave={() => link.hasMegaMenu && setIsMegaMenuOpen(false)}
                 >
-                  <a
-                    href={link.href}
-                    className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 flex items-center gap-1.5 ${
-                      isScrolled 
-                        ? 'text-foreground hover:text-primary hover:bg-primary/5' 
-                        : 'text-white/90 hover:text-white hover:bg-white/10'
-                    }`}
-                  >
-                    {link.label}
-                    {link.hasMegaMenu && <ChevronDown className="w-4 h-4" />}
-                  </a>
+                  {link.hasMegaMenu ? (
+                    <span
+                      className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 flex items-center gap-1.5 cursor-pointer ${
+                        isScrolled 
+                          ? 'text-foreground hover:text-primary hover:bg-primary/5' 
+                          : 'text-white/90 hover:text-white hover:bg-white/10'
+                      }`}
+                    >
+                      {link.label}
+                      <ChevronDown className="w-4 h-4" />
+                    </span>
+                  ) : (
+                    <Link
+                      to={link.href}
+                      className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 flex items-center gap-1.5 ${
+                        isScrolled 
+                          ? 'text-foreground hover:text-primary hover:bg-primary/5' 
+                          : 'text-white/90 hover:text-white hover:bg-white/10'
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </div>
               ))}
             </nav>
@@ -215,13 +229,23 @@ const Header = () => {
               <div className="p-6 pt-24">
                 <nav className="flex flex-col gap-2">
                   {navLinks.map((link) => (
-                    <a
-                      key={link.label}
-                      href={link.href}
-                      className="px-4 py-3.5 rounded-xl text-foreground hover:bg-primary/5 hover:text-primary font-medium transition-all duration-200"
-                    >
-                      {link.label}
-                    </a>
+                    link.hasMegaMenu ? (
+                      <span
+                        key={link.label}
+                        className="px-4 py-3.5 rounded-xl text-foreground hover:bg-primary/5 hover:text-primary font-medium transition-all duration-200 cursor-pointer"
+                      >
+                        {link.label}
+                      </span>
+                    ) : (
+                      <Link
+                        key={link.label}
+                        to={link.href}
+                        className="px-4 py-3.5 rounded-xl text-foreground hover:bg-primary/5 hover:text-primary font-medium transition-all duration-200"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    )
                   ))}
                 </nav>
                 <div className="mt-8 pt-6 border-t border-border">
