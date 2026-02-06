@@ -13,6 +13,9 @@ import ProductDetail from "./pages/ProductDetail";
 import Designers from "./pages/Designers";
 import DesignerProfile from "./pages/DesignerProfile";
 import DesignDetail from "./pages/DesignDetail";
+import ClientRegistration from "./pages/ClientRegistration";
+import ClientLogin from "./pages/ClientLogin";
+import ForgotPassword from "./pages/ForgotPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +37,9 @@ const App = () => (
           <Route path="/designers" element={<Designers />} />
           <Route path="/designer/:id" element={<DesignerProfile />} />
           <Route path="/design/:id" element={<DesignDetail />} />
+          <Route path="/inscription-client" element={<ClientRegistration />} />
+          <Route path="/connexion-client" element={<ClientLogin />} />
+          <Route path="/mot-de-passe-oublie" element={<ForgotPassword />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

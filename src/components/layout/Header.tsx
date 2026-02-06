@@ -1,17 +1,26 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ShoppingCart, User, Menu, X, ChevronDown } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Search, ShoppingCart, User, Menu, X, ChevronDown, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import MegaMenu from './MegaMenu';
+import { useAuth } from '@/hooks/useAuth';
 
 const Header = () => {
+  const navigate = useNavigate();
+  const { user, profile, signOut, isAuthenticated } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [cartCount] = useState(0);
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -150,18 +159,49 @@ const Header = () => {
                 Devenir partenaire
               </Button>
 
-              {/* User */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className={`h-10 w-10 rounded-xl transition-all duration-300 ${
-                  isScrolled 
-                    ? 'hover:bg-primary/5 text-foreground' 
-                    : 'hover:bg-white/10 text-white'
-                }`}
-              >
-                <User className="h-5 w-5" />
-              </Button>
+              {/* User Auth Section */}
+              {isAuthenticated ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`h-10 w-10 rounded-xl transition-all duration-300 ${
+                        isScrolled 
+                          ? 'hover:bg-primary/5 text-foreground' 
+                          : 'hover:bg-white/10 text-white'
+                      }`}
+                    >
+                      <User className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <div className="px-3 py-2">
+                      <p className="text-sm font-medium">{profile?.first_name} {profile?.last_name}</p>
+                      <p className="text-xs text-muted-foreground">{user?.email}</p>
+                    </div>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Se déconnecter
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link to="/connexion-client">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={`h-10 w-10 rounded-xl transition-all duration-300 ${
+                      isScrolled 
+                        ? 'hover:bg-primary/5 text-foreground' 
+                        : 'hover:bg-white/10 text-white'
+                    }`}
+                  >
+                    <User className="h-5 w-5" />
+                  </Button>
+                </Link>
+              )}
 
               {/* Cart */}
               <Button

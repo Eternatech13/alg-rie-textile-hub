@@ -14,7 +14,83 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      partner_companies: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          ccp_number: string
+          ccp_validated: boolean
+          created_at: string
+          first_name: string
+          id: string
+          is_independent: boolean
+          last_name: string
+          partner_company_id: string | null
+          phone: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ccp_number: string
+          ccp_validated?: boolean
+          created_at?: string
+          first_name: string
+          id?: string
+          is_independent?: boolean
+          last_name: string
+          partner_company_id?: string | null
+          phone: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ccp_number?: string
+          ccp_validated?: boolean
+          created_at?: string
+          first_name?: string
+          id?: string
+          is_independent?: boolean
+          last_name?: string
+          partner_company_id?: string | null
+          phone?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_partner_company_id_fkey"
+            columns: ["partner_company_id"]
+            isOneToOne: false
+            referencedRelation: "partner_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
