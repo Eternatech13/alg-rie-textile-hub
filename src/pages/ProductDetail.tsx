@@ -15,6 +15,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { mockProducts, mockSuppliers, mockDesigners, formatPrice } from '@/data/mockProducts';
+import { useCart } from '@/contexts/CartContext';
+import { useToast } from '@/hooks/use-toast';
 
 const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 const colors = [
@@ -26,6 +28,8 @@ const colors = [
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { addItem } = useCart();
+  const { toast } = useToast();
   const [selectedSize, setSelectedSize] = useState('M');
   const [selectedColor, setSelectedColor] = useState('Noir');
   const [quantity, setQuantity] = useState(1);
@@ -52,7 +56,24 @@ const ProductDetail = () => {
       .slice(0, 4);
   }, [product]);
 
-  // Mock product images
+  const handleAddToCart = () => {
+    if (!product) return;
+    
+    addItem({
+      productId: product.id,
+      product,
+      quantity,
+      size: selectedSize,
+      color: selectedColor,
+      designerName: designer?.name,
+    });
+
+    toast({
+      title: "Ajouté au panier",
+      description: `${product.name} (${selectedSize}, ${selectedColor}) a été ajouté à votre panier.`,
+    });
+  };
+
   const productImages = [
     product?.image,
     'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&h=600&fit=crop',
@@ -268,7 +289,7 @@ const ProductDetail = () => {
 
               {/* Action Buttons */}
               <div className="flex gap-3 pt-4">
-                <Button size="lg" className="flex-1 h-14 rounded-xl text-base">
+                <Button size="lg" className="flex-1 h-14 rounded-xl text-base" onClick={handleAddToCart}>
                   <ShoppingCart className="w-5 h-5 mr-2" />
                   Ajouter au panier
                 </Button>
