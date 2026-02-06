@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { Sparkles, ArrowRight, Building2, Package, MapPin, Clock, ChevronDown, FileText } from 'lucide-react';
+import { Sparkles, Building2, Package, MapPin, Clock, ChevronDown, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { mockProducts } from '@/data/mockProducts';
 
@@ -28,8 +28,9 @@ const HeroSection = () => {
     { icon: Clock, value: '24h', label: 'Réponse' },
   ];
 
-  // Get featured products for background
-  const featuredProducts = mockProducts.filter(p => p.featured).slice(0, 12);
+  // Get featured products for background - need more for full coverage
+  const featuredProducts = mockProducts.filter(p => p.featured);
+  const allProducts = [...featuredProducts, ...featuredProducts, ...featuredProducts].slice(0, 24);
 
   return (
     <section
@@ -38,7 +39,7 @@ const HeroSection = () => {
       className="relative min-h-screen flex items-center overflow-hidden bg-primary"
     >
       {/* Layer 1: Grid Pattern */}
-      <div className="absolute inset-0 opacity-15">
+      <div className="absolute inset-0 opacity-10">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
@@ -49,38 +50,24 @@ const HeroSection = () => {
         </svg>
       </div>
 
-      {/* Layer 2: Background Products Grid */}
+      {/* Layer 2: Full Background Products Grid */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[60%] h-[80%]">
-          <div 
-            className="grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 p-4 h-full"
-            style={{
-              perspective: '1000px',
-            }}
-          >
-            <div 
-              className="contents"
-              style={{
-                transform: 'rotateY(-5deg) rotateX(3deg)',
-              }}
+        <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 p-4">
+          {allProducts.map((product, i) => (
+            <motion.div
+              key={`${product.id}-${i}`}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.03 }}
+              className="aspect-[3/4] rounded-xl overflow-hidden"
             >
-              {featuredProducts.map((product, i) => (
-                <motion.div
-                  key={`${product.id}-${i}`}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + i * 0.05 }}
-                  className="aspect-square rounded-2xl overflow-hidden bg-white/5 border border-white/10"
-                >
-                  <img
-                    src={product.image}
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
-                </motion.div>
-              ))}
-            </div>
-          </div>
+              <img
+                src={product.image}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
+          ))}
         </div>
       </div>
 
@@ -91,12 +78,12 @@ const HeroSection = () => {
           background: useTransform(
             [smoothX, smoothY],
             ([x, y]) =>
-              `radial-gradient(circle 350px at ${x}px ${y}px, transparent 0%, transparent 15%, hsl(var(--primary) / 0.4) 35%, hsl(var(--primary) / 0.75) 55%, hsl(var(--primary) / 0.92) 75%)`
+              `radial-gradient(circle 300px at ${x}px ${y}px, transparent 0%, transparent 20%, hsl(var(--primary) / 0.5) 40%, hsl(var(--primary) / 0.8) 60%, hsl(var(--primary) / 0.95) 80%)`
           ),
         }}
       />
 
-      {/* Layer 4: Content - Okadoo style layout */}
+      {/* Layer 4: Content - Okadoo style layout (left aligned) */}
       <div className="relative z-20 section-container py-24 md:py-32">
         <div className="max-w-2xl">
           {/* Badge */}
