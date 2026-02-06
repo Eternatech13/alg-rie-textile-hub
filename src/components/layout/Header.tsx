@@ -22,7 +22,7 @@ const Header = () => {
 
   const navLinks = [
     { label: 'Accueil', href: '/' },
-    { label: 'Sociétés de textile', href: '/societes' },
+    { label: 'Sociétés textiles', href: '/societes-textiles' },
     { label: 'Toutes catégories', href: '#', hasMegaMenu: true },
     { label: 'À propos', href: '/a-propos' }
   ];
