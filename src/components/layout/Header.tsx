@@ -25,6 +25,7 @@ const Header = () => {
     { label: 'Accueil', href: '/' },
     { label: 'Catalogue', href: '/catalogue' },
     { label: 'Sociétés textiles', href: '/societes-textiles' },
+    { label: 'Designers', href: '/designers' },
     { label: 'Toutes catégories', href: '#', hasMegaMenu: true },
     { label: 'À propos', href: '/a-propos' }
   ];

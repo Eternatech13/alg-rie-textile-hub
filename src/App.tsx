@@ -10,6 +10,7 @@ import Catalogue from "./pages/Catalogue";
 import CategoryPage from "./pages/CategoryPage";
 import SubcategoryPage from "./pages/SubcategoryPage";
 import ProductDetail from "./pages/ProductDetail";
+import Designers from "./pages/Designers";
 import DesignerProfile from "./pages/DesignerProfile";
 import DesignDetail from "./pages/DesignDetail";
 import NotFound from "./pages/NotFound";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/categorie/:slug" element={<CategoryPage />} />
           <Route path="/categorie/:slug/:subcategory" element={<SubcategoryPage />} />
           <Route path="/produit/:id" element={<ProductDetail />} />
+          <Route path="/designers" element={<Designers />} />
           <Route path="/designer/:id" element={<DesignerProfile />} />
           <Route path="/design/:id" element={<DesignDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
