@@ -2,12 +2,14 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import PromotionalBanner from '@/components/banner/PromotionalBanner';
 import HeroSection from '@/components/hero/HeroSection';
+import AdvertisementBanner from '@/components/sections/AdvertisementBanner';
 import ProductSection from '@/components/products/ProductSection';
 import CollectionsByGenre from '@/components/sections/CollectionsByGenre';
 import DesignersSection from '@/components/sections/DesignersSection';
 import SuppliersSection from '@/components/sections/SuppliersSection';
 import HowItWorksSection from '@/components/sections/HowItWorksSection';
 import AdvantagesSection from '@/components/sections/AdvantagesSection';
+import ContactSection from '@/components/sections/ContactSection';
 
 const Index = () => {
   return (
@@ -19,26 +21,32 @@ const Index = () => {
         {/* Section 1: Hero with Flashlight Effect */}
         <HeroSection />
         
-        {/* Section 2: Featured Products */}
+        {/* Section 2: Advertisement Banner Carousel */}
+        <AdvertisementBanner />
+        
+        {/* Section 3: Featured Products */}
         <ProductSection />
         
-        {/* Section 3: Collections by Genre */}
+        {/* Section 4: Collections by Genre */}
         <CollectionsByGenre />
         
-        {/* Section 4: Partner Designers */}
+        {/* Section 5: Partner Designers */}
         <DesignersSection />
         
-        {/* Section 5: Textile Companies */}
+        {/* Section 6: Textile Companies */}
         <SuppliersSection />
         
-        {/* Section 6: How It Works */}
+        {/* Section 7: How It Works */}
         <HowItWorksSection />
         
-        {/* Section 7: Advantages */}
+        {/* Section 8: Advantages */}
         <AdvantagesSection />
+        
+        {/* Section 9: Contact */}
+        <ContactSection />
       </main>
       
-      {/* Section 8: Footer */}
+      {/* Section 10: Footer */}
       <Footer />
     </div>
   );
