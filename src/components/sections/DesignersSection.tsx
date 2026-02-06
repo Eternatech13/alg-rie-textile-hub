@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { mockDesigners } from '@/data/mockProducts';
+import { Link } from 'react-router-dom';
+import { mockDesignerProfiles } from '@/data/mockDesigners';
 import { Button } from '@/components/ui/button';
 
 const DesignersSection = () => {
-  const featuredDesigners = mockDesigners.filter(d => d.featured);
+  const featuredDesigners = mockDesignerProfiles.filter(d => d.featured);
 
   return (
     <section className="section-padding bg-gradient-to-br from-primary/5 via-background to-secondary/5">
@@ -47,7 +48,7 @@ const DesignersSection = () => {
                   loading="lazy"
                 />
                 <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-medium whitespace-nowrap">
-                  {designer.specialty}
+                  {designer.specialties[0]}
                 </div>
               </div>
 
@@ -63,9 +64,12 @@ const DesignersSection = () => {
               <Button
                 variant="outline"
                 className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground group"
+                asChild
               >
-                Voir la collection
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <Link to={`/designer/${designer.id}`}>
+                  Voir le portfolio
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
             </motion.div>
           ))}
