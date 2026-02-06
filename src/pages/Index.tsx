@@ -1,12 +1,45 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import PromotionalBanner from '@/components/banner/PromotionalBanner';
+import HeroSection from '@/components/hero/HeroSection';
+import ProductSection from '@/components/products/ProductSection';
+import CollectionsByGenre from '@/components/sections/CollectionsByGenre';
+import DesignersSection from '@/components/sections/DesignersSection';
+import SuppliersSection from '@/components/sections/SuppliersSection';
+import HowItWorksSection from '@/components/sections/HowItWorksSection';
+import AdvantagesSection from '@/components/sections/AdvantagesSection';
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen flex flex-col">
+      <PromotionalBanner />
+      <Header />
+      
+      <main className="flex-1">
+        {/* Section 1: Hero with Flashlight Effect */}
+        <HeroSection />
+        
+        {/* Section 2: Featured Products */}
+        <ProductSection />
+        
+        {/* Section 3: Collections by Genre */}
+        <CollectionsByGenre />
+        
+        {/* Section 4: Partner Designers */}
+        <DesignersSection />
+        
+        {/* Section 5: Textile Companies */}
+        <SuppliersSection />
+        
+        {/* Section 6: How It Works */}
+        <HowItWorksSection />
+        
+        {/* Section 7: Advantages */}
+        <AdvantagesSection />
+      </main>
+      
+      {/* Section 8: Footer */}
+      <Footer />
     </div>
   );
 };
