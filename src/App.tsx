@@ -21,6 +21,7 @@ import Cart from "./pages/Cart";
 import BecomePartner from "./pages/BecomePartner";
 import DesignerApplication from "./pages/DesignerApplication";
 import TextileCompanyApplication from "./pages/TextileCompanyApplication";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +51,7 @@ const App = () => (
             <Route path="/devenir-partenaire" element={<BecomePartner />} />
             <Route path="/devenir-partenaire/designer" element={<DesignerApplication />} />
             <Route path="/devenir-partenaire/societe-textile" element={<TextileCompanyApplication />} />
+            <Route path="/a-propos" element={<About />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
