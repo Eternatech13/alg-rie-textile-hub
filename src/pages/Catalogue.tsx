@@ -48,6 +48,19 @@ const Catalogue = () => {
   const [sortBy, setSortBy] = useState('popularity');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  
+  // State for collapsible filter sections
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    categories: false,
+    subcategories: false,
+    price: false,
+    suppliers: false,
+    genders: false,
+    sizes: false,
+    colors: false,
+    textileTypes: false,
+    designers: false,
+  });
 
   // Initialize filters from URL parameters
   useEffect(() => {
@@ -190,11 +203,15 @@ const Catalogue = () => {
     selectedDesigners.length + selectedSuppliers.length + selectedTextileTypes.length + 
     (priceRange[0] > 0 || priceRange[1] < 20000 ? 1 : 0);
 
-  const FilterSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <Collapsible defaultOpen className="border-b border-border pb-4">
+  const FilterSection = ({ title, sectionKey, children }: { title: string; sectionKey: string; children: React.ReactNode }) => (
+    <Collapsible 
+      open={openSections[sectionKey]} 
+      onOpenChange={(isOpen) => setOpenSections(prev => ({ ...prev, [sectionKey]: isOpen }))}
+      className="border-b border-border pb-4"
+    >
       <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
         {title}
-        <ChevronDown className="w-4 h-4 transition-transform duration-200 [[data-state=open]>&]:rotate-180" />
+        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openSections[sectionKey] ? 'rotate-180' : ''}`} />
       </CollapsibleTrigger>
       <CollapsibleContent className="pt-3 space-y-2">
         {children}
@@ -213,7 +230,7 @@ const Catalogue = () => {
       )}
 
       {/* Genre */}
-      <FilterSection title="Genre">
+      <FilterSection title="Genre" sectionKey="genders">
         {genders.map(gender => (
           <label key={gender} className="flex items-center gap-3 cursor-pointer group">
             <Checkbox
@@ -228,7 +245,7 @@ const Catalogue = () => {
       </FilterSection>
 
       {/* Catégorie */}
-      <FilterSection title="Catégorie">
+      <FilterSection title="Catégorie" sectionKey="categories">
         {Array.from(new Set(mockProducts.map(p => p.category))).map(category => {
           const count = mockProducts.filter(p => p.category === category).length;
           return (
@@ -247,7 +264,7 @@ const Catalogue = () => {
 
       {/* Sous-catégorie */}
       {selectedCategories.length > 0 && (
-        <FilterSection title="Sous-catégorie">
+        <FilterSection title="Sous-catégorie" sectionKey="subcategories">
           {Array.from(new Set(
             mockProducts
               .filter(p => selectedCategories.includes(p.category))
@@ -272,7 +289,7 @@ const Catalogue = () => {
       )}
 
       {/* Prix */}
-      <FilterSection title="Prix">
+      <FilterSection title="Prix" sectionKey="price">
         <div className="px-2 pt-2">
           <Slider
             value={priceRange}
@@ -289,7 +306,7 @@ const Catalogue = () => {
       </FilterSection>
 
       {/* Taille */}
-      <FilterSection title="Taille">
+      <FilterSection title="Taille" sectionKey="sizes">
         <div className="flex flex-wrap gap-2">
           {sizes.map(size => (
             <button
@@ -308,7 +325,7 @@ const Catalogue = () => {
       </FilterSection>
 
       {/* Couleur */}
-      <FilterSection title="Couleur">
+      <FilterSection title="Couleur" sectionKey="colors">
         <div className="flex flex-wrap gap-2">
           {colors.map(color => (
             <button
@@ -327,7 +344,7 @@ const Catalogue = () => {
       </FilterSection>
 
       {/* Designer */}
-      <FilterSection title="Designer">
+      <FilterSection title="Designer" sectionKey="designers">
         {mockDesigners.map(designer => (
           <label key={designer.id} className="flex items-center gap-3 cursor-pointer group">
             <Checkbox
@@ -342,7 +359,7 @@ const Catalogue = () => {
       </FilterSection>
 
       {/* Société Textile */}
-      <FilterSection title="Fournisseur">
+      <FilterSection title="Fournisseur" sectionKey="suppliers">
         {Array.from(new Set(mockProducts.map(p => p.supplier.id))).map(supplierId => {
           const product = mockProducts.find(p => p.supplier.id === supplierId);
           if (!product) return null;
@@ -362,7 +379,7 @@ const Catalogue = () => {
       </FilterSection>
 
       {/* Type Textile */}
-      <FilterSection title="Type Textile">
+      <FilterSection title="Type Textile" sectionKey="textileTypes">
         {textileTypes.map(type => (
           <label key={type} className="flex items-center gap-3 cursor-pointer group">
             <Checkbox

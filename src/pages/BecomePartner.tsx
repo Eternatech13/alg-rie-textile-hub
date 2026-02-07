@@ -58,52 +58,116 @@ const BecomePartner = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5" />
-        <div className="absolute top-20 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
+      {/* Hero Section with Immersive Image */}
+      <section className="relative h-[70vh] min-h-[500px] overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img 
+            src="https://www.e-smarttec.com/images/devenir-partenaire.webp" 
+            alt="Devenir Partenaire" 
+            className="w-full h-full object-cover"
+          />
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        </div>
         
-        <div className="section-container relative z-10">
+        {/* Content */}
+        <div className="section-container relative z-10 h-full flex items-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-4xl mx-auto"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-2xl text-white"
           >
-            <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+            <span className="inline-block px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-medium mb-6">
               Partenariat
             </span>
-            <h1 className="text-hero text-foreground mb-6">
+            <h1 className="text-5xl md:text-6xl font-heading font-bold mb-6 leading-tight">
               Rejoignez l'écosystème{' '}
-              <span className="text-gradient-premium">Sallate Bladi</span>
+              <span className="text-accent">Sallate Bladi</span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-white/90 mb-8 leading-relaxed">
               Valorisez votre savoir-faire textile et vos créations sur une marketplace algérienne innovante
             </p>
+            <div className="flex flex-wrap gap-4">
+              <Button 
+                size="lg" 
+                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 h-14 text-lg"
+                asChild
+              >
+                <a href="#partner-types">
+                  Découvrir les opportunités
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </a>
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white/30 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:text-white font-semibold px-8 h-14 text-lg"
+                asChild
+              >
+                <Link to="/contact">
+                  Nous contacter
+                </Link>
+              </Button>
+            </div>
           </motion.div>
         </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        >
+          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
+            <div className="w-1.5 h-3 bg-white/70 rounded-full" />
+          </div>
+        </motion.div>
       </section>
 
       {/* Benefits Section */}
-      <section className="py-12 bg-secondary/5">
+      <section className="section-padding bg-gradient-to-b from-background to-secondary/5">
         <div className="section-container">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-section text-foreground mb-4">
+              Pourquoi devenir partenaire ?
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Profitez d'avantages exclusifs pour développer votre activité
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {benefits.map((benefit, index) => (
               <motion.div
-                key={benefit.title}
+                key={index}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="flex items-start gap-4 p-6 rounded-2xl bg-background border border-border"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <benefit.icon className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-heading font-semibold text-foreground mb-1">{benefit.title}</h3>
-                  <p className="text-sm text-muted-foreground">{benefit.description}</p>
-                </div>
+                <Card className="h-full border-0 shadow-lg hover:shadow-xl transition-shadow">
+                  <CardContent className="p-8 text-center">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
+                      <benefit.icon className="h-8 w-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-heading font-bold text-foreground mb-3">
+                      {benefit.title}
+                    </h3>
+                    <p className="text-muted-foreground">
+                      {benefit.description}
+                    </p>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </div>
@@ -111,7 +175,7 @@ const BecomePartner = () => {
       </section>
 
       {/* Partner Type Selection */}
-      <section className="section-padding">
+      <section id="partner-types" className="section-padding">
         <div className="section-container">
           <motion.div
             initial={{ opacity: 0 }}
@@ -174,6 +238,32 @@ const BecomePartner = () => {
           </div>
         </div>
       </section>
+      {/* Benefits Section */}
+      <section className="py-12 bg-secondary/5">
+        <div className="section-container">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {benefits.map((benefit, index) => (
+              <motion.div
+                key={benefit.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="flex items-start gap-4 p-6 rounded-2xl bg-background border border-border"
+              >
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <benefit.icon className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-semibold text-foreground mb-1">{benefit.title}</h3>
+                  <p className="text-sm text-muted-foreground">{benefit.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      
 
       {/* Trust Section */}
       <section className="py-16 bg-primary/5">
