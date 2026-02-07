@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { Sparkles, Building2, Package, MapPin, Clock, ChevronDown, FileText } from 'lucide-react';
+import { Building2, Package, MapPin, Clock, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { mockProducts } from '@/data/mockProducts';
 
@@ -84,21 +84,8 @@ const HeroSection = () => {
       />
 
       {/* Layer 4: Content - Okadoo style layout (left aligned) */}
-      <div className="relative z-20 section-container py-24 md:py-32">
+      <div className="relative z-20 w-full px-4 sm:px-6 md:px-8 lg:px-12 py-24 md:py-32">
         <div className="max-w-2xl">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-6"
-          >
-            <Sparkles className="w-4 h-4 text-accent" />
-            <span className="text-sm font-medium text-white/90">
-              La marketplace textile #1 en Algérie
-            </span>
-          </motion.div>
-
           {/* Title */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -122,50 +109,49 @@ const HeroSection = () => {
             Salaate Bladi simplifie les achats textiles pour les entreprises de toutes tailles.
           </motion.p>
 
-          {/* CTAs Row */}
+          {/* Enhanced Stats */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="flex flex-col sm:flex-row items-start gap-6 mb-12"
-          >
-            <Button
-              size="lg"
-              className="bg-white text-primary hover:bg-white/90 rounded-full px-8 py-6 text-base font-semibold shadow-lg"
-            >
-              <FileText className="mr-2 w-5 h-5" />
-              Demander un produit
-            </Button>
-            
-            <div className="flex items-center gap-3 text-white/70 text-sm max-w-xs leading-relaxed">
-              <span>
-                Pas de navigation interminable. Dites-nous simplement ce dont vous avez besoin, nous nous occupons du sourcing.
-              </span>
-            </div>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-white/10"
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-12"
           >
             {stats.map((stat, i) => (
               <motion.div
                 key={stat.label}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.7 + i * 0.1 }}
-                className="flex flex-col items-start gap-1"
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ 
+                  delay: 0.7 + i * 0.1,
+                  type: "spring",
+                  stiffness: 100
+                }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -8,
+                  transition: { duration: 0.2 }
+                }}
+                className="group relative bg-white/[0.08] backdrop-blur-md border border-white/[0.15] rounded-xl p-4 cursor-default overflow-hidden"
               >
-                <div className="flex items-center gap-2">
-                  <stat.icon className="w-4 h-4 text-accent" />
-                  <span className="text-2xl font-heading font-bold text-white">
-                    {stat.value}
+                {/* Gradient background on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
+                {/* Animated border */}
+                <div className="absolute inset-0 rounded-xl border border-transparent group-hover:border-accent/20 transition-colors duration-300" />
+                
+                <div className="relative text-center">
+                  <div className="flex flex-col items-center gap-3 mb-3">
+                    <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center group-hover:bg-accent/30 transition-colors shadow-lg">
+                      <stat.icon className="w-6 h-6 text-accent" />
+                    </div>
+                    <span className="text-2xl md:text-3xl font-heading font-bold text-white tabular-nums leading-none">
+                      {stat.value}
+                    </span>
+                  </div>
+                  <span className="text-sm text-white/70 font-medium uppercase tracking-wider">
+                    {stat.label}
                   </span>
                 </div>
-                <span className="text-xs text-white/60">{stat.label}</span>
               </motion.div>
             ))}
           </motion.div>

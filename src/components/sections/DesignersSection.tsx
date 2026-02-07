@@ -17,9 +17,6 @@ const DesignersSection = () => {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <span className="inline-block px-4 py-1 rounded-full bg-accent/10 text-accent text-sm font-medium mb-4">
-            Créateurs talentueux
-          </span>
           <h2 className="text-section text-foreground mb-4">
             Nos Designers Partenaires
           </h2>
@@ -37,10 +34,10 @@ const DesignersSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group bg-card rounded-2xl p-6 border border-border hover:border-primary/20 card-hover text-center"
+              className="group bg-card rounded-2xl p-4 border border-border hover:border-primary/20 card-hover text-center"
             >
               {/* Photo */}
-              <div className="relative w-32 h-32 mx-auto mb-6">
+              <div className="relative w-32 h-32   mx-auto mb-6">
                 <img
                   src={designer.photo}
                   alt={designer.name}
@@ -56,7 +53,7 @@ const DesignersSection = () => {
               <h3 className="font-heading font-semibold text-xl text-card-foreground mb-2">
                 {designer.name}
               </h3>
-              <p className="text-muted-foreground text-sm mb-6 line-clamp-3">
+              <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
                 {designer.bio}
               </p>
 
@@ -85,9 +82,12 @@ const DesignersSection = () => {
           <Button
             size="lg"
             className="bg-primary text-primary-foreground hover:bg-primary/90"
+            asChild
           >
-            Voir tous les designers
-            <ArrowRight className="ml-2 w-5 h-5" />
+            <Link to="/designers">
+              Voir tous les designers
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Link>
           </Button>
         </motion.div>
       </div>
