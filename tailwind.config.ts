@@ -66,7 +66,7 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
         // Direct color palette for specific use cases
-        "dark-teal": "#214c5d",
+        "dark-teal": "#2f898f",
         "light-blue": "#98b9c0",
         "camel": "#cb9357",
         "golden-earth": "#9b6a31",

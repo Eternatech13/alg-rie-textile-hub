@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, Building2 } from 'lucide-react';
-import { mockSuppliers } from '@/data/mockProducts';
+import { Link } from 'react-router-dom';
+import { mockTextileCompanies } from '@/data/mockTextileCompanies';
 import { Button } from '@/components/ui/button';
 
 const SuppliersSection = () => {
@@ -28,15 +29,16 @@ const SuppliersSection = () => {
 
         {/* Suppliers Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockSuppliers.map((supplier, index) => (
+          {mockTextileCompanies.slice(0, 6).map((supplier, index) => (
             <motion.div
               key={supplier.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group bg-card rounded-2xl p-6 border border-border hover:border-primary/20 card-hover"
+              className="group bg-card rounded-2xl border border-border hover:border-primary/20 card-hover overflow-hidden"
             >
+              <Link to={`/societe-textile/${supplier.id}`} className="block p-6 hover:bg-muted/20 transition-colors">
               <div className="flex items-start gap-4">
                 {/* Logo */}
                 <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 bg-muted/50">
@@ -80,7 +82,7 @@ const SuppliersSection = () => {
 
               {/* Specialties */}
               <div className="flex flex-wrap gap-2 mb-4">
-                {supplier.specialty.slice(0, 3).map((spec) => (
+                {supplier.textileDomains.slice(0, 3).map((spec) => (
                   <span
                     key={spec}
                     className="px-2 py-1 rounded-lg bg-muted text-muted-foreground text-xs"
@@ -89,9 +91,10 @@ const SuppliersSection = () => {
                   </span>
                 ))}
               </div>
-
-              {/* Footer */}
-              <div className="flex items-center justify-between pt-4 border-t border-border">
+              </Link>
+              
+              {/* Footer with separate link for products */}
+              <div className="flex items-center justify-between p-6 pt-4 border-t border-border bg-muted/10">
                 <span className="text-sm text-muted-foreground">
                   {supplier.productCount} produits
                 </span>
@@ -99,9 +102,12 @@ const SuppliersSection = () => {
                   variant="ghost"
                   size="sm"
                   className="text-primary hover:text-primary hover:bg-primary/10"
+                  asChild
                 >
-                  Voir produits
-                  <ArrowRight className="ml-1 w-4 h-4" />
+                  <Link to={`/societe-textile/${supplier.id}#produits`} onClick={(e) => e.stopPropagation()}>
+                    Voir produits
+                    <ArrowRight className="ml-1 w-4 h-4" />
+                  </Link>
                 </Button>
               </div>
             </motion.div>
@@ -119,9 +125,12 @@ const SuppliersSection = () => {
             size="lg"
             variant="outline"
             className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+            asChild
           >
-            Voir toutes les sociétés
-            <ArrowRight className="ml-2 w-5 h-5" />
+            <Link to="/societes-textiles">
+              Voir toutes les sociétés
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Link>
           </Button>
         </motion.div>
       </div>

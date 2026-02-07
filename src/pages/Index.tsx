@@ -1,6 +1,5 @@
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import PromotionalBanner from '@/components/banner/PromotionalBanner';
 import HeroSection from '@/components/hero/HeroSection';
 import AdvertisementBanner from '@/components/sections/AdvertisementBanner';
 import ProductSection from '@/components/products/ProductSection';
@@ -14,7 +13,6 @@ import ContactSection from '@/components/sections/ContactSection';
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <PromotionalBanner />
       <Header />
       
       <main className="flex-1">
