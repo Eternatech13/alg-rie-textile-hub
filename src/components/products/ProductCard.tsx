@@ -43,7 +43,7 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     >
       {/* Image */}
       <Link to={`/produit/${product.id}`}>
-        <div className="relative aspect-[4/3] overflow-hidden">
+        <div className="relative aspect-[3/2] overflow-hidden">
           <img
             src={product.image}
             alt={product.name}
@@ -78,7 +78,7 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       </Link>
 
       {/* Content */}
-      <div className="p-5">
+      <div className="p-4">
         <p className="text-xs text-muted-foreground mb-1">
           {product.supplier.name}
         </p>

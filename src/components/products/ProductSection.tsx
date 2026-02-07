@@ -17,10 +17,6 @@ const ProductSection = () => {
           className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12"
         >
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-              <Sparkles className="w-4 h-4" />
-              Sélection Salaate Bladi
-            </div>
             <h2 className="text-section text-foreground">
               Produits en vedette
             </h2>
