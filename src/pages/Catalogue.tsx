@@ -1,10 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, SlidersHorizontal, X, ChevronDown,
   Grid3X3, List, Heart, Eye, ShoppingCart, Star
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
@@ -34,9 +34,11 @@ const colors = [
 const textileTypes = ['Coton', 'Lin', 'Soie', 'Polyester', 'Textile traditionnel', 'Textile médical', 'Textile industriel'];
 
 const Catalogue = () => {
+  const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGenders, setSelectedGenders] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedDesigners, setSelectedDesigners] = useState<string[]>([]);
@@ -46,6 +48,19 @@ const Catalogue = () => {
   const [sortBy, setSortBy] = useState('popularity');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  // Initialize filters from URL parameters
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    const subcategoryParam = searchParams.get('subcategory');
+    
+    if (categoryParam) {
+      setSelectedCategories([categoryParam]);
+    }
+    if (subcategoryParam) {
+      setSelectedSubcategories([subcategoryParam]);
+    }
+  }, [searchParams]);
 
   // Filter products
   const filteredProducts = useMemo(() => {
@@ -57,14 +72,66 @@ const Catalogue = () => {
       products = products.filter(p =>
         p.name.toLowerCase().includes(query) ||
         p.category.toLowerCase().includes(query) ||
+        p.subcategory.toLowerCase().includes(query) ||
+        p.sector.toLowerCase().includes(query) ||
         p.supplier.name.toLowerCase().includes(query) ||
-        p.tags.some(t => t.toLowerCase().includes(query))
+        p.tags.some(t => t.toLowerCase().includes(query)) ||
+        p.description.toLowerCase().includes(query)
       );
     }
 
     // Category filter
     if (selectedCategories.length > 0) {
       products = products.filter(p => selectedCategories.includes(p.category));
+    }
+
+    // Subcategory filter
+    if (selectedSubcategories.length > 0) {
+      products = products.filter(p => selectedSubcategories.includes(p.subcategory));
+    }
+
+    // Gender filter (based on sector)
+    if (selectedGenders.length > 0) {
+      products = products.filter(p => 
+        selectedGenders.some(gender => 
+          p.sector.toLowerCase().includes(gender.toLowerCase()) ||
+          p.tags.some(tag => tag.toLowerCase().includes(gender.toLowerCase()))
+        )
+      );
+    }
+
+    // Size filter (check if product has sizes attribute)
+    if (selectedSizes.length > 0) {
+      products = products.filter(p => 
+        p.sizes && p.sizes.some(size => selectedSizes.includes(size))
+      );
+    }
+
+    // Color filter (check tags and colors attribute)
+    if (selectedColors.length > 0) {
+      products = products.filter(p => 
+        selectedColors.some(color => 
+          p.tags.some(tag => tag.toLowerCase().includes(color.toLowerCase())) ||
+          (p.colors && p.colors.some(c => c.toLowerCase().includes(color.toLowerCase())))
+        )
+      );
+    }
+
+    // Textile Type filter
+    if (selectedTextileTypes.length > 0) {
+      products = products.filter(p => 
+        selectedTextileTypes.some(type => 
+          p.tags.some(tag => tag.toLowerCase().includes(type.toLowerCase())) ||
+          (p.textileType && p.textileType.toLowerCase().includes(type.toLowerCase()))
+        )
+      );
+    }
+
+    // Designer filter
+    if (selectedDesigners.length > 0) {
+      products = products.filter(p => 
+        p.designerId && selectedDesigners.includes(p.designerId)
+      );
     }
 
     // Price filter
@@ -89,10 +156,13 @@ const Catalogue = () => {
       case 'featured':
         products.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
         break;
+      default:
+        // popularity - keep original order
+        break;
     }
 
     return products;
-  }, [searchQuery, selectedCategories, priceRange, selectedSuppliers, sortBy]);
+  }, [searchQuery, selectedCategories, selectedSubcategories, selectedGenders, selectedSizes, selectedColors, selectedTextileTypes, selectedDesigners, priceRange, selectedSuppliers, sortBy]);
 
   const toggleFilter = (value: string, array: string[], setter: (arr: string[]) => void) => {
     if (array.includes(value)) {
@@ -105,6 +175,7 @@ const Catalogue = () => {
   const clearAllFilters = () => {
     setSelectedGenders([]);
     setSelectedCategories([]);
+    setSelectedSubcategories([]);
     setSelectedSizes([]);
     setSelectedColors([]);
     setSelectedDesigners([]);
@@ -115,8 +186,8 @@ const Catalogue = () => {
   };
 
   const activeFiltersCount = selectedGenders.length + selectedCategories.length + 
-    selectedSizes.length + selectedColors.length + selectedDesigners.length + 
-    selectedSuppliers.length + selectedTextileTypes.length + 
+    selectedSubcategories.length + selectedSizes.length + selectedColors.length + 
+    selectedDesigners.length + selectedSuppliers.length + selectedTextileTypes.length + 
     (priceRange[0] > 0 || priceRange[1] < 20000 ? 1 : 0);
 
   const FilterSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
@@ -158,18 +229,47 @@ const Catalogue = () => {
 
       {/* Catégorie */}
       <FilterSection title="Catégorie">
-        {mockCategories.map(category => (
-          <label key={category.id} className="flex items-center gap-3 cursor-pointer group">
-            <Checkbox
-              checked={selectedCategories.includes(category.name)}
-              onCheckedChange={() => toggleFilter(category.name, selectedCategories, setSelectedCategories)}
-            />
-            <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
-              {category.name} ({category.productCount})
-            </span>
-          </label>
-        ))}
+        {Array.from(new Set(mockProducts.map(p => p.category))).map(category => {
+          const count = mockProducts.filter(p => p.category === category).length;
+          return (
+            <label key={category} className="flex items-center gap-3 cursor-pointer group">
+              <Checkbox
+                checked={selectedCategories.includes(category)}
+                onCheckedChange={() => toggleFilter(category, selectedCategories, setSelectedCategories)}
+              />
+              <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                {category} ({count})
+              </span>
+            </label>
+          );
+        })}
       </FilterSection>
+
+      {/* Sous-catégorie */}
+      {selectedCategories.length > 0 && (
+        <FilterSection title="Sous-catégorie">
+          {Array.from(new Set(
+            mockProducts
+              .filter(p => selectedCategories.includes(p.category))
+              .map(p => p.subcategory)
+          )).map(subcategory => {
+            const count = mockProducts.filter(p => 
+              selectedCategories.includes(p.category) && p.subcategory === subcategory
+            ).length;
+            return (
+              <label key={subcategory} className="flex items-center gap-3 cursor-pointer group">
+                <Checkbox
+                  checked={selectedSubcategories.includes(subcategory)}
+                  onCheckedChange={() => toggleFilter(subcategory, selectedSubcategories, setSelectedSubcategories)}
+                />
+                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                  {subcategory} ({count})
+                </span>
+              </label>
+            );
+          })}
+        </FilterSection>
+      )}
 
       {/* Prix */}
       <FilterSection title="Prix">
@@ -242,18 +342,23 @@ const Catalogue = () => {
       </FilterSection>
 
       {/* Société Textile */}
-      <FilterSection title="Société Textile">
-        {mockSuppliers.map(supplier => (
-          <label key={supplier.id} className="flex items-center gap-3 cursor-pointer group">
-            <Checkbox
-              checked={selectedSuppliers.includes(supplier.id)}
-              onCheckedChange={() => toggleFilter(supplier.id, selectedSuppliers, setSelectedSuppliers)}
-            />
-            <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
-              {supplier.name}
-            </span>
-          </label>
-        ))}
+      <FilterSection title="Fournisseur">
+        {Array.from(new Set(mockProducts.map(p => p.supplier.id))).map(supplierId => {
+          const product = mockProducts.find(p => p.supplier.id === supplierId);
+          if (!product) return null;
+          const count = mockProducts.filter(p => p.supplier.id === supplierId).length;
+          return (
+            <label key={supplierId} className="flex items-center gap-3 cursor-pointer group">
+              <Checkbox
+                checked={selectedSuppliers.includes(supplierId)}
+                onCheckedChange={() => toggleFilter(supplierId, selectedSuppliers, setSelectedSuppliers)}
+              />
+              <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                {product.supplier.name} ({count})
+              </span>
+            </label>
+          );
+        })}
       </FilterSection>
 
       {/* Type Textile */}
@@ -380,6 +485,16 @@ const Catalogue = () => {
                 onClick={() => toggleFilter(cat, selectedCategories, setSelectedCategories)}
               >
                 {cat} <X className="w-3 h-3 ml-1" />
+              </Badge>
+            ))}
+            {selectedSubcategories.map(sub => (
+              <Badge
+                key={sub}
+                variant="secondary"
+                className="px-3 py-1 cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
+                onClick={() => toggleFilter(sub, selectedSubcategories, setSelectedSubcategories)}
+              >
+                {sub} <X className="w-3 h-3 ml-1" />
               </Badge>
             ))}
             {selectedGenders.map(gender => (
