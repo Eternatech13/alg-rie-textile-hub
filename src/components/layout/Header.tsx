@@ -150,15 +150,17 @@ const Header = () => {
               </Button>
 
               {/* Partner Button - Desktop */}
-              <Button
-                className={`hidden md:flex transition-all duration-300 font-semibold rounded-xl ${
-                  isScrolled
-                    ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                    : 'bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30'
-                }`}
-              >
-                Devenir partenaire
-              </Button>
+              <Link to="/devenir-partenaire">
+                <Button
+                  className={`hidden md:flex transition-all duration-300 font-semibold rounded-xl ${
+                    isScrolled
+                      ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                      : 'bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30'
+                  }`}
+                >
+                  Devenir partenaire
+                </Button>
+              </Link>
 
               {/* User Auth Section */}
               {isAuthenticated ? (
@@ -293,9 +295,11 @@ const Header = () => {
                   ))}
                 </nav>
                 <div className="mt-8 pt-6 border-t border-border">
-                  <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl h-12 font-semibold">
-                    Devenir partenaire
-                  </Button>
+                  <Link to="/devenir-partenaire" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl h-12 font-semibold">
+                      Devenir partenaire
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </motion.div>
