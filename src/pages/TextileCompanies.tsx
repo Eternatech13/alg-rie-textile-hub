@@ -169,7 +169,7 @@ const CompanyCard = ({ company }: { company: TextileCompany }) => {
 const FilterSection = ({
   title,
   children,
-  defaultOpen = true,
+  defaultOpen = false,
 }: {
   title: string;
   children: React.ReactNode;
@@ -179,9 +179,9 @@ const FilterSection = ({
   
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="border-b border-border pb-4">
-      <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-medium">
+      <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-medium hover:text-primary transition-colors">
         {title}
-        <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </CollapsibleTrigger>
       <CollapsibleContent className="pt-2 space-y-2">
         {children}
