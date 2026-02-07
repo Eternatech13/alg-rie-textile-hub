@@ -18,6 +18,9 @@ import ClientRegistration from "./pages/ClientRegistration";
 import ClientLogin from "./pages/ClientLogin";
 import ForgotPassword from "./pages/ForgotPassword";
 import Cart from "./pages/Cart";
+import BecomePartner from "./pages/BecomePartner";
+import DesignerApplication from "./pages/DesignerApplication";
+import TextileCompanyApplication from "./pages/TextileCompanyApplication";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +47,9 @@ const App = () => (
             <Route path="/connexion-client" element={<ClientLogin />} />
             <Route path="/mot-de-passe-oublie" element={<ForgotPassword />} />
             <Route path="/panier" element={<Cart />} />
+            <Route path="/devenir-partenaire" element={<BecomePartner />} />
+            <Route path="/devenir-partenaire/designer" element={<DesignerApplication />} />
+            <Route path="/devenir-partenaire/societe-textile" element={<TextileCompanyApplication />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
