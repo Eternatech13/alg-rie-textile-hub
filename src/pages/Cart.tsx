@@ -104,7 +104,7 @@ const Cart = () => {
           ) : (
             <div className="grid lg:grid-cols-3 gap-8">
               {/* Left Column - Cart Items, Delivery, Payment */}
-              <div className="lg:col-span-2 space-y-8">
+              <div className="lg:col-span-2 space-y-6">
                 {/* Cart Items */}
                 <div className="space-y-4">
                   <h2 className="font-heading font-semibold text-xl text-foreground">
@@ -117,13 +117,9 @@ const Cart = () => {
                   </AnimatePresence>
                 </div>
 
-                {/* Delivery Options */}
-                <div className="bg-card rounded-2xl border border-border p-6">
+                {/* Delivery & Payment Options - Compact Cards */}
+                <div className="bg-card rounded-2xl border border-border divide-y divide-border">
                   <DeliveryOptions />
-                </div>
-
-                {/* Payment Options */}
-                <div className="bg-card rounded-2xl border border-border p-6">
                   <PaymentOptions />
                 </div>
               </div>

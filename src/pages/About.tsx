@@ -163,15 +163,14 @@ const About = () => {
       
       {/* SECTION 1: Hero Introduction */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/95 to-primary/90">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 left-0 w-full h-full" 
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-              }}
-            />
-          </div>
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img 
+            src="https://lalgerieaujourdhui.dz/wp-content/uploads/2022/12/textile.jpeg" 
+            alt="Textile algérien"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/85 to-primary/80" />
         </div>
         
         <div className="relative section-container py-20">
@@ -186,7 +185,8 @@ const About = () => {
                 Marketplace Textile Algérien
               </span>
               <h1 className="text-hero mb-6">
-                Sallate Bladi — La plateforme du textile algérien
+                Sallate Bladi <br />
+                 La plateforme du textile algérien
               </h1>
               <p className="text-xl text-white/80 mb-8 leading-relaxed">
                 Nous connectons les sociétés textiles locales, les designers et les citoyens 
@@ -215,15 +215,18 @@ const About = () => {
             >
               <div className="relative aspect-square max-w-lg mx-auto">
                 <div className="absolute inset-0 bg-gradient-to-br from-accent/30 to-secondary/30 rounded-3xl rotate-6" />
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-white/5 rounded-3xl backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <Factory className="w-24 h-24 text-accent mx-auto mb-6" />
-                    <p className="text-white/90 text-lg font-medium">
-                      Industrie Textile Algérienne
-                    </p>
-                    <p className="text-white/60 text-sm mt-2">
-                      Savoir-faire et innovation
-                    </p>
+                <div className="absolute inset-0 rounded-3xl overflow-hidden backdrop-blur-sm border border-white/20">
+                  <img 
+                    src="https://lalgerieaujourdhui.dz/wp-content/uploads/2022/12/textile.jpeg" 
+                    alt="Industrie textile algérienne"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/40 to-transparent" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center p-8">
+                      
+                     
+                    </div>
                   </div>
                 </div>
               </div>
@@ -469,94 +472,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* SECTION 6: Valorisation Textile Algérien */}
-      <section className="section-padding bg-background">
-        <div className="section-container">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div {...fadeInUp}>
-              <span className="inline-block px-4 py-1 rounded-full bg-accent/10 text-accent text-sm font-medium mb-4">
-                Made in Algeria
-              </span>
-              <h2 className="text-section mb-6">
-                Valorisation du textile algérien 🇩🇿
-              </h2>
-              <p className="text-muted-foreground text-lg mb-6">
-                Sallate Bladi s'engage à promouvoir le savoir-faire textile national et à soutenir 
-                l'économie locale à travers une plateforme dédiée à la production algérienne.
-              </p>
-              
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="bg-muted/30 rounded-xl p-4">
-                  <Brush className="w-8 h-8 text-accent mb-2" />
-                  <p className="font-semibold">Artisanat</p>
-                  <p className="text-sm text-muted-foreground">Savoir-faire traditionnel</p>
-                </div>
-                <div className="bg-muted/30 rounded-xl p-4">
-                  <Factory className="w-8 h-8 text-primary mb-2" />
-                  <p className="font-semibold">Industrie</p>
-                  <p className="text-sm text-muted-foreground">Production moderne</p>
-                </div>
-                <div className="bg-muted/30 rounded-xl p-4">
-                  <Palette className="w-8 h-8 text-secondary mb-2" />
-                  <p className="font-semibold">Design</p>
-                  <p className="text-sm text-muted-foreground">Créativité locale</p>
-                </div>
-                <div className="bg-muted/30 rounded-xl p-4">
-                  <Package className="w-8 h-8 text-accent mb-2" />
-                  <p className="font-semibold">Qualité</p>
-                  <p className="text-sm text-muted-foreground">Standards élevés</p>
-                </div>
-              </div>
-
-              <Button asChild className="bg-accent hover:bg-accent/90">
-                <Link to="/catalogue">
-                  Explorer les produits
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-4">
-                  <div className="aspect-[3/4] bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl flex items-center justify-center">
-                    <div className="text-center">
-                      <span className="text-6xl">🧵</span>
-                      <p className="mt-2 text-sm text-muted-foreground">Tissage</p>
-                    </div>
-                  </div>
-                  <div className="aspect-square bg-gradient-to-br from-accent/10 to-accent/20 rounded-2xl flex items-center justify-center">
-                    <div className="text-center">
-                      <span className="text-5xl">👗</span>
-                      <p className="mt-2 text-sm text-muted-foreground">Confection</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-4 pt-8">
-                  <div className="aspect-square bg-gradient-to-br from-secondary/10 to-primary/10 rounded-2xl flex items-center justify-center">
-                    <div className="text-center">
-                      <span className="text-5xl">🎨</span>
-                      <p className="mt-2 text-sm text-muted-foreground">Design</p>
-                    </div>
-                  </div>
-                  <div className="aspect-[3/4] bg-gradient-to-br from-primary/5 to-accent/10 rounded-2xl flex items-center justify-center">
-                    <div className="text-center">
-                      <span className="text-6xl">🏭</span>
-                      <p className="mt-2 text-sm text-muted-foreground">Production</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
+     
       {/* SECTION 7: Impact Social */}
       <section className="section-padding bg-muted/20">
         <div className="section-container">
