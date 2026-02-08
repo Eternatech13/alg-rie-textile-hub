@@ -13,19 +13,19 @@ const advertisements: Advertisement[] = [
     id: 1,
     title: "Collection Printemps 2024",
     subtitle: "Découvrez les nouvelles tendances textiles algériennes",
-    image: "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=1600&auto=format&fit=crop&q=80"
+    image: "https://i.pinimg.com/736x/57/89/11/5789118ed47d5e0afcd568658e79b86c.jpg"
   },
   {
     id: 2,
     title: "Artisanat Premium",
     subtitle: "Des créations uniques par nos meilleurs artisans",
-    image: "https://images.unsplash.com/photo-1606722590583-6951b5ea92ad?w=1600&auto=format&fit=crop&q=80"
+    image: "https://i.pinimg.com/736x/9a/bc/f5/9abcf5341e12009a0d6f77bd82b06773.jpg"
   },
   {
     id: 3,
     title: "Offre Professionnels",
     subtitle: "-20% sur les commandes en gros pour les entreprises",
-    image: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1600&auto=format&fit=crop&q=80"
+    image: "https://i.pinimg.com/1200x/88/7a/71/887a71bd6d227e1b2c0553aa88d6684c.jpg"
   }
 ];
 
@@ -41,7 +41,7 @@ const AdvertisementBanner = () => {
   }, []);
 
   return (
-    <section className="relative h-[300px] md:h-[400px] overflow-hidden bg-primary">
+    <section className="relative h-[280px] md:h-[350px] overflow-hidden bg-primary">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
@@ -53,15 +53,15 @@ const AdvertisementBanner = () => {
         >
           {/* Background Image */}
           <div 
-            className="absolute inset-0 bg-cover bg-center"
+            className="absolute inset-0 bg-cover bg-top"
             style={{ backgroundImage: `url(${advertisements[currentIndex].image})` }}
           />
           
-          {/* Overlay Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/70 to-transparent" />
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/30" />
           
-          {/* Content - Only Captions */}
-          <div className="relative h-full section-container flex items-center">
+          {/* Content - Title and Description Top Left */}
+          <div className="relative h-full section-container flex items-start pt-16">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
