@@ -6,15 +6,15 @@ const Footer = () => {
   const footerLinks = {
     navigation: [
       { label: 'Accueil', href: '/' },
-      { label: 'Catégories', href: '/categories' },
-      { label: 'Fournisseurs', href: '/fournisseurs' },
+      { label: 'Catégories', href: '/catalogue' },
+      { label: 'Societe de Textile ', href: '/societes-textiles' },
       { label: 'À propos', href: '/a-propos' },
     ],
     sectors: [
-      { label: 'Habillement', href: '/categories/habillement' },
-      { label: 'Professionnel', href: '/categories/professionnel' },
-      { label: 'Décoration', href: '/categories/decoration' },
-      { label: 'Artisanat', href: '/categories/artisanat' },
+      { label: 'Femme', href: '/categorie/femme' },
+      { label: 'Homme', href: '/categorie/homme' },
+      { label: 'Enfant', href: '/categorie/enfant' },
+      { label: 'Professionnel', href: '/categorie/professionnel' },
     ],
     social: [
       { icon: Facebook, href: '#', label: 'Facebook' },
@@ -93,16 +93,16 @@ const Footer = () => {
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                 <span className="text-white/70 text-xs">
-                  123 Rue Didouche Mourad, Alger Centre
+                  Tlemcen,Algérie
                 </span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-accent shrink-0" />
                 <a
-                  href="tel:+213555123456"
+                  href="tel:+213 555791587"
                   className="text-white/70 hover:text-white transition-colors text-xs"
                 >
-                  +213 555 123 456
+                  +213 555791587
                 </a>
               </li>
               <li className="flex items-center gap-2">
