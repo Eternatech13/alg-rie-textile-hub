@@ -107,7 +107,7 @@ const BecomePartner = () => {
                 className="border-white/30 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:text-white font-semibold px-8 h-14 text-lg"
                 asChild
               >
-                <Link to="/contact">
+                <Link to="#">
                   Nous contacter
                 </Link>
               </Button>

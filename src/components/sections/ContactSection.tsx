@@ -26,12 +26,12 @@ const ContactSection = () => {
     {
       icon: MapPin,
       title: "Adresse",
-      details: "123 Rue Didouche Mourad, Alger Centre, Algérie"
+      details: "Tlemcen, Algérie"
     },
     {
       icon: Phone,
       title: "Téléphone",
-      details: "+213 555 123 456"
+      details: "+213 555791587"
     },
     {
       icon: Mail,
@@ -108,22 +108,7 @@ const ContactSection = () => {
               </div>
             </div>
 
-            {/* Map Placeholder */}
-            <div className="relative h-48 rounded-2xl overflow-hidden bg-secondary/20">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <MapPin className="w-8 h-8 text-primary mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">Carte interactive</p>
-                </div>
-              </div>
-              {/* Grid pattern */}
-              <div 
-                className="absolute inset-0 opacity-30"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm1 1v38h38V1H1z' fill='%23000' fill-opacity='0.05'/%3E%3C/svg%3E")`
-                }}
-              />
-            </div>
+           
           </motion.div>
 
           {/* Contact Form */}

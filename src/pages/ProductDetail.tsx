@@ -76,9 +76,6 @@ const ProductDetail = () => {
 
   const productImages = [
     product?.image,
-    'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1558171813-4c088753af8f?w=800&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&h=600&fit=crop',
   ];
 
   if (!product) {
