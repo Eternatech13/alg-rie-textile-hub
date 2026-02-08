@@ -206,7 +206,7 @@ export const mockDesignerProfiles: DesignerProfile[] = [
     id: "des_006",
     name: "Rachid Amrani",
     photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop",
-    coverImage: "https://images.unsplash.com/photo-1604671801908-6f0c6a092c05?w=1200&h=400&fit=crop",
+    coverImage: "https://www.babyproof.fr/wp-content/uploads/2024/12/1734030910-optimisation-de-lespace-ludique-idees-creatives-et-fonctionnelles-1024x585.jpg",
     bio: "Designer spécialisé dans la mode enfant et les uniformes scolaires. Chaque création est pensée pour le confort et la sécurité des plus jeunes.",
     experience: "14 ans dans la mode enfant",
     inspirations: "Le monde de l'enfance, les couleurs vives, la praticité",
