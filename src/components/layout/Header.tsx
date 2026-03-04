@@ -55,23 +55,21 @@ const Header = () => {
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
               <motion.div 
-                whileHover={{ scale: 1.05, rotate: 5 }}
+                whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 400 }}
-                className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                  isScrolled 
-                    ? 'bg-primary shadow-md' 
-                    : 'bg-white/20 backdrop-blur-sm border border-white/30'
-                }`}
+                className="flex items-center gap-3"
               >
-                <span className={`font-heading font-bold text-xl ${
-                  isScrolled ? 'text-primary-foreground' : 'text-white'
-                }`}>S</span>
+                <img 
+                  src="/logo.svg" 
+                  alt="Sallate Bladi Logo" 
+                  className="w-11 h-11 object-contain"
+                />
+                <span className={`font-heading font-bold text-xl hidden sm:block transition-colors duration-300 ${
+                  isScrolled ? 'text-primary' : 'text-white'
+                }`}>
+                  Salaate Bladi
+                </span>
               </motion.div>
-              <span className={`font-heading font-bold text-xl hidden sm:block transition-colors duration-300 ${
-                isScrolled ? 'text-primary' : 'text-white'
-              }`}>
-                Salaate Bladi
-              </span>
             </Link>
 
             {/* Desktop Navigation */}

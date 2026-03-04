@@ -30,9 +30,11 @@ const Footer = () => {
           {/* Branding */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                <span className="font-heading font-bold text-lg">S</span>
-              </div>
+              <img 
+                src="/logo.svg" 
+                alt="Sallate Bladi Logo" 
+                className="w-8 h-8 object-contain"
+              />
               <span className="font-heading font-bold text-lg">Salaate Bladi</span>
             </div>
             <p className="text-white/70 text-xs mb-4 leading-relaxed">
