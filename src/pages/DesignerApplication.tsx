@@ -354,8 +354,56 @@ const DesignerApplication = () => {
                   </motion.div>
                 )}
 
-                {/* Step 2 - Professional Profile */}
+                {/* Step 2 - Account & Password */}
                 {currentStep === 2 && (
+                  <motion.div
+                    key="step2"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="space-y-6"
+                  >
+                    <h2 className="font-heading text-xl font-semibold mb-4">Créez votre compte</h2>
+                    <p className="text-sm text-muted-foreground">Ces identifiants vous permettront de vous connecter à votre espace designer.</p>
+                    <div>
+                      <Label htmlFor="reg-email">Email (pré-rempli)</Label>
+                      <Input id="reg-email" type="email" value={formData.email} disabled className="mt-1 bg-muted/20" />
+                    </div>
+                    <div>
+                      <Label htmlFor="password">Mot de passe * (min. 6 caractères)</Label>
+                      <div className="relative mt-1">
+                        <Input
+                          id="password"
+                          type={showPassword ? 'text' : 'password'}
+                          value={formData.password}
+                          onChange={(e) => updateFormData('password', e.target.value)}
+                          placeholder="Choisissez un mot de passe"
+                          className="pr-10"
+                        />
+                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="confirmPassword">Confirmer le mot de passe *</Label>
+                      <Input
+                        id="confirmPassword"
+                        type="password"
+                        value={formData.confirmPassword}
+                        onChange={(e) => updateFormData('confirmPassword', e.target.value)}
+                        placeholder="Confirmez votre mot de passe"
+                        className="mt-1"
+                      />
+                      {formData.confirmPassword && formData.password !== formData.confirmPassword && (
+                        <p className="text-sm text-destructive mt-1">Les mots de passe ne correspondent pas</p>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Step 3 - Professional Profile */}
+                {currentStep === 3 && (
                   <motion.div
                     key="step2"
                     initial={{ opacity: 0, x: 20 }}
