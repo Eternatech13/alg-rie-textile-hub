@@ -533,8 +533,8 @@ const DesignerApplication = () => {
                   </motion.div>
                 )}
 
-                {/* Step 4 - Collaboration */}
-                {currentStep === 4 && (
+                {/* Step 5 - Collaboration */}
+                {currentStep === 5 && (
                   <motion.div
                     key="step4"
                     initial={{ opacity: 0, x: 20 }}
