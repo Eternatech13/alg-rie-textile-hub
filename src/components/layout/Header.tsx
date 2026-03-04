@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ShoppingCart, User, Menu, X, ChevronDown, LogOut } from 'lucide-react';
+import { Search, ShoppingCart, User, Menu, X, ChevronDown, LogOut, Heart } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useFavorites } from '@/contexts/FavoritesContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -17,6 +18,8 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const { count: favCount } = useFavorites();
 
   const handleSignOut = async () => {
     await signOut();
@@ -123,6 +126,9 @@ const Header = () => {
                     <Input
                       type="text"
                       placeholder="Rechercher..."
+                      value={searchQuery}
+                      onChange={e => setSearchQuery(e.target.value)}
+                      onKeyDown={e => { if (e.key === 'Enter' && searchQuery.trim()) { navigate(`/recherche?q=${encodeURIComponent(searchQuery.trim())}`); setIsSearchOpen(false); setSearchQuery(''); } }}
                       className={`w-64 h-10 transition-all ${
                         isScrolled 
                           ? 'bg-secondary/20 border-border' 
@@ -146,6 +152,24 @@ const Header = () => {
               >
                 <Search className="h-5 w-5" />
               </Button>
+
+              {/* Favorites */}
+              <Link to="/mon-compte/favoris">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={`h-10 w-10 rounded-xl relative transition-all duration-300 ${
+                    isScrolled ? 'hover:bg-primary/5 text-foreground' : 'hover:bg-white/10 text-white'
+                  }`}
+                >
+                  <Heart className="h-5 w-5" />
+                  {favCount > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-xs flex items-center justify-center font-medium">
+                      {favCount > 99 ? '99+' : favCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
 
               {/* Partner Button - Desktop */}
               <Link to="/devenir-partenaire">

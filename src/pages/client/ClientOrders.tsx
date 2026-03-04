@@ -7,7 +7,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Link } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 import { mockClientOrders } from '@/data/mockClientData';
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger
+} from '@/components/ui/alert-dialog';
 
 const statusConfig: Record<string, { label: string; class: string; icon: typeof Clock }> = {
   pending: { label: 'En attente', class: 'bg-yellow-100 text-yellow-800', icon: Clock },
@@ -21,8 +26,15 @@ const statusConfig: Record<string, { label: string; class: string; icon: typeof 
 export default function ClientOrders() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [orders, setOrders] = useState(mockClientOrders);
+  const { toast } = useToast();
 
-  const filtered = mockClientOrders.filter(o => {
+  const handleCancel = (orderId: string) => {
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: 'cancelled' as const } : o));
+    toast({ title: 'Commande annulée', description: 'Votre commande a été annulée avec succès.' });
+  };
+
+  const filtered = orders.filter(o => {
     const matchSearch = o.orderNumber.toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === 'all' || o.status === statusFilter;
     return matchSearch && matchStatus;
@@ -32,7 +44,7 @@ export default function ClientOrders() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-heading font-bold text-foreground">Mes Commandes</h1>
-        <p className="text-muted-foreground text-sm">{mockClientOrders.length} commandes</p>
+        <p className="text-muted-foreground text-sm">{orders.length} commandes</p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3">
@@ -50,6 +62,7 @@ export default function ClientOrders() {
             <SelectItem value="production">En production</SelectItem>
             <SelectItem value="shipped">Expédiée</SelectItem>
             <SelectItem value="delivered">Livrée</SelectItem>
+            <SelectItem value="cancelled">Annulée</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -58,6 +71,7 @@ export default function ClientOrders() {
         {filtered.map((order, i) => {
           const config = statusConfig[order.status];
           const StatusIcon = config.icon;
+          const canCancel = order.status === 'pending';
           return (
             <motion.div key={order.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
               <Card className="card-hover">
@@ -100,9 +114,34 @@ export default function ClientOrders() {
                         <span>Livraison estimée : {new Date(order.estimatedDelivery).toLocaleDateString('fr-FR')}</span>
                       )}
                     </div>
-                    <Link to={`/mon-compte/commandes/${order.id}`}>
-                      <Button variant="outline" size="sm"><Eye className="mr-1 h-4 w-4" /> Détails</Button>
-                    </Link>
+                    <div className="flex gap-2">
+                      {canCancel && (
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="outline" size="sm" className="text-destructive border-destructive/30 hover:bg-destructive/10">
+                              <XCircle className="mr-1 h-4 w-4" /> Annuler
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Annuler la commande ?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Êtes-vous sûr de vouloir annuler la commande {order.orderNumber} ? Cette action est irréversible.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Non, garder</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleCancel(order.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                Oui, annuler
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      )}
+                      <Link to={`/mon-compte/commandes/${order.id}`}>
+                        <Button variant="outline" size="sm"><Eye className="mr-1 h-4 w-4" /> Détails</Button>
+                      </Link>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
