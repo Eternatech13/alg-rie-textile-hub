@@ -597,8 +597,8 @@ const DesignerApplication = () => {
                   </motion.div>
                 )}
 
-                {/* Step 5 - Documents */}
-                {currentStep === 5 && (
+                {/* Step 6 - Documents */}
+                {currentStep === 6 && (
                   <motion.div
                     key="step5"
                     initial={{ opacity: 0, x: 20 }}
