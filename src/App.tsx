@@ -42,6 +42,21 @@ import DesignerProfilePage from "./pages/designer/DesignerProfilePage";
 import DesignerNotifications from "./pages/designer/DesignerNotifications";
 import DesignerSettings from "./pages/designer/DesignerSettings";
 
+// Admin Space
+import AdminLayout from "./components/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminDesigners from "./pages/admin/AdminDesigners";
+import AdminTextileCompanies from "./pages/admin/AdminTextileCompanies";
+import AdminPartnerCompanies from "./pages/admin/AdminPartnerCompanies";
+import AdminProducts from "./pages/admin/AdminProducts";
+import AdminOrders from "./pages/admin/AdminOrders";
+import AdminPayments from "./pages/admin/AdminPayments";
+import AdminPromotions from "./pages/admin/AdminPromotions";
+import AdminReviews from "./pages/admin/AdminReviews";
+import AdminNotifications from "./pages/admin/AdminNotifications";
+import AdminSettings from "./pages/admin/AdminSettings";
+
 // Client Space
 import ClientLayout from "./components/client/ClientLayout";
 import ClientProfile from "./pages/client/ClientProfile";
@@ -98,6 +113,22 @@ const App = () => (
                   <Route path="profil" element={<DesignerProfilePage />} />
                   <Route path="notifications" element={<DesignerNotifications />} />
                   <Route path="parametres" element={<DesignerSettings />} />
+                </Route>
+
+                {/* Admin Space */}
+                <Route path="/admin" element={<AdminLayout />}>
+                  <Route path="dashboard" element={<AdminDashboard />} />
+                  <Route path="utilisateurs" element={<AdminUsers />} />
+                  <Route path="designers" element={<AdminDesigners />} />
+                  <Route path="societes-textiles" element={<AdminTextileCompanies />} />
+                  <Route path="societes-partenaires" element={<AdminPartnerCompanies />} />
+                  <Route path="produits" element={<AdminProducts />} />
+                  <Route path="commandes" element={<AdminOrders />} />
+                  <Route path="paiements" element={<AdminPayments />} />
+                  <Route path="promotions" element={<AdminPromotions />} />
+                  <Route path="avis" element={<AdminReviews />} />
+                  <Route path="notifications" element={<AdminNotifications />} />
+                  <Route path="parametres" element={<AdminSettings />} />
                 </Route>
 
                 {/* Client Space */}
