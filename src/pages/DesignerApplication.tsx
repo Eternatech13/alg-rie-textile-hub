@@ -134,13 +134,36 @@ const DesignerApplication = () => {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    const { error } = await signUp(
+      formData.email,
+      formData.password,
+      {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone,
+        ccpNumber: '0000000000',
+        isIndependent: true,
+        partnerCompanyId: null,
+      },
+      'designer'
+    );
+
     setIsSubmitting(false);
+
+    if (error) {
+      toast({
+        title: "Erreur",
+        description: (error as any).message || "Une erreur est survenue lors de l'inscription.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitted(true);
     toast({
-      title: "Candidature envoyée",
-      description: "Notre équipe vous contactera après validation.",
+      title: "Compte designer créé",
+      description: "Vous pouvez maintenant vous connecter avec vos identifiants.",
     });
   };
 
