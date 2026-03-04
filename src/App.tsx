@@ -24,6 +24,18 @@ import TextileCompanyApplication from "./pages/TextileCompanyApplication";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
+// Designer Space
+import DesignerLayout from "./components/designer/DesignerLayout";
+import DesignerDashboard from "./pages/designer/DesignerDashboard";
+import DesignerDesigns from "./pages/designer/DesignerDesigns";
+import NewDesign from "./pages/designer/NewDesign";
+import DesignerConventions from "./pages/designer/DesignerConventions";
+import DesignerOrders from "./pages/designer/DesignerOrders";
+import DesignerRevenue from "./pages/designer/DesignerRevenue";
+import DesignerProfilePage from "./pages/designer/DesignerProfilePage";
+import DesignerNotifications from "./pages/designer/DesignerNotifications";
+import DesignerSettings from "./pages/designer/DesignerSettings";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -52,6 +64,20 @@ const App = () => (
             <Route path="/devenir-partenaire/designer" element={<DesignerApplication />} />
             <Route path="/devenir-partenaire/societe-textile" element={<TextileCompanyApplication />} />
             <Route path="/a-propos" element={<About />} />
+
+            {/* Designer Space */}
+            <Route path="/designer" element={<DesignerLayout />}>
+              <Route path="dashboard" element={<DesignerDashboard />} />
+              <Route path="designs" element={<DesignerDesigns />} />
+              <Route path="designs/nouveau" element={<NewDesign />} />
+              <Route path="conventions" element={<DesignerConventions />} />
+              <Route path="commandes" element={<DesignerOrders />} />
+              <Route path="revenus" element={<DesignerRevenue />} />
+              <Route path="profil" element={<DesignerProfilePage />} />
+              <Route path="notifications" element={<DesignerNotifications />} />
+              <Route path="parametres" element={<DesignerSettings />} />
+            </Route>
+
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
