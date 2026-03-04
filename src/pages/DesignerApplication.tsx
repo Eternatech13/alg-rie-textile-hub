@@ -65,7 +65,7 @@ const DesignerApplication = () => {
     specialties: [] as string[],
     yearsExperience: '',
     bio: '',
-    // Step 3 - Portfolio
+    // Step 4 - Portfolio
     portfolioImages: [] as File[],
     portfolioUrl: '',
     targetCategories: [] as string[],
