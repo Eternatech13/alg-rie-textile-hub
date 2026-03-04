@@ -16,10 +16,11 @@ import { useAuth } from '@/hooks/useAuth';
 
 const STEPS = [
   { id: 1, title: 'Informations personnelles', icon: User },
-  { id: 2, title: 'Profil professionnel', icon: Briefcase },
-  { id: 3, title: 'Portfolio', icon: Image },
-  { id: 4, title: 'Collaboration', icon: Handshake },
-  { id: 5, title: 'Documents', icon: FileText },
+  { id: 2, title: 'Compte & Mot de passe', icon: Lock },
+  { id: 3, title: 'Profil professionnel', icon: Briefcase },
+  { id: 4, title: 'Portfolio', icon: Image },
+  { id: 5, title: 'Collaboration', icon: Handshake },
+  { id: 6, title: 'Documents', icon: FileText },
 ];
 
 const SPECIALTIES = [
