@@ -13,13 +13,13 @@ const advertisements: Advertisement[] = [
     id: 1,
     title: "",
     subtitle: "",
-    image: "/banner2.svg"
+    image: "/banner-partenaires.png"
   },
   {
     id: 2,
     title: "",
     subtitle: "",
-    image: "/banner1.svg"
+    image: "/banner-jeans.png"
   }
 ];
 
@@ -51,8 +51,7 @@ const AdvertisementBanner = () => {
             style={{ backgroundImage: `url(${advertisements[currentIndex].image})` }}
           />
           
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-black/30" />
+          {/* No overlay */}
           
           {/* Content - Title and Description Top Left */}
           <div className="relative h-full section-container flex items-start pt-16">
