@@ -68,6 +68,18 @@ import ClientFavorites from "./pages/client/ClientFavorites";
 import ClientNotifications from "./pages/client/ClientNotifications";
 import ClientSettings from "./pages/client/ClientSettings";
 
+// Textile Company Space
+import TextileCompanyLayout from "./components/textile/TextileCompanyLayout";
+import TextileCompanyDashboard from "./pages/textile/TextileCompanyDashboard";
+import TextileCompanyStructure from "./pages/textile/TextileCompanyStructure";
+import TextileCompanyProducts from "./pages/textile/TextileCompanyProducts";
+import TextileCompanyOrders from "./pages/textile/TextileCompanyOrders";
+import TextileCompanyConventions from "./pages/textile/TextileCompanyConventions";
+import TextileCompanyRevenue from "./pages/textile/TextileCompanyRevenue";
+import TextileCompanyProfilePage from "./pages/textile/TextileCompanyProfilePage";
+import TextileCompanyNotifications from "./pages/textile/TextileCompanyNotifications";
+import TextileCompanySettings from "./pages/textile/TextileCompanySettings";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -141,6 +153,19 @@ const App = () => (
                   <Route path="favoris" element={<ClientFavorites />} />
                   <Route path="notifications" element={<ClientNotifications />} />
                   <Route path="parametres" element={<ClientSettings />} />
+                </Route>
+
+                {/* Textile Company Space */}
+                <Route path="/societe-textile" element={<TextileCompanyLayout />}>
+                  <Route path="dashboard" element={<TextileCompanyDashboard />} />
+                  <Route path="structure" element={<TextileCompanyStructure />} />
+                  <Route path="produits" element={<TextileCompanyProducts />} />
+                  <Route path="commandes" element={<TextileCompanyOrders />} />
+                  <Route path="conventions" element={<TextileCompanyConventions />} />
+                  <Route path="revenus" element={<TextileCompanyRevenue />} />
+                  <Route path="profil" element={<TextileCompanyProfilePage />} />
+                  <Route path="notifications" element={<TextileCompanyNotifications />} />
+                  <Route path="parametres" element={<TextileCompanySettings />} />
                 </Route>
 
                 <Route path="*" element={<NotFound />} />
