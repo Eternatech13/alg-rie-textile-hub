@@ -143,7 +143,7 @@ export const useAuth = () => {
       }
 
       // Assign role
-      const { error: roleError } = await supabase
+      const { error: roleError } = await (supabase as any)
         .from('user_roles')
         .insert({
           user_id: data.user.id,
