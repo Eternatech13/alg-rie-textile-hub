@@ -29,7 +29,7 @@ const ClientLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
-  const { signIn, isAuthenticated, isCcpValidated, profile, loading } = useAuth();
+  const { signIn, isAuthenticated, isCcpValidated, profile, userRole, loading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCcpPending, setShowCcpPending] = useState(false);
@@ -58,12 +58,17 @@ const ClientLogin = () => {
       if (!profile.ccp_validated) {
         setShowCcpPending(true);
       }
-      // Clear the session storage return URL after successful login
       sessionStorage.removeItem('checkout_return_url');
-      // Navigate to return URL
+      
+      // Redirect designers to their dashboard
+      if (userRole === 'designer') {
+        navigate('/designer/dashboard', { replace: true });
+        return;
+      }
+      
       navigate(returnUrl, { replace: true });
     }
-  }, [isAuthenticated, profile, navigate, returnUrl]);
+  }, [isAuthenticated, profile, userRole, navigate, returnUrl]);
 
   const onSubmit = async (data: LoginFormData) => {
     setIsSubmitting(true);

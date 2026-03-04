@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Upload, CheckCircle, User, Briefcase, Image, Handshake, FileText, Loader2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Upload, CheckCircle, User, Briefcase, Image, Handshake, FileText, Loader2, Lock, Eye, EyeOff } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,13 +12,15 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/components/ui/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 const STEPS = [
   { id: 1, title: 'Informations personnelles', icon: User },
-  { id: 2, title: 'Profil professionnel', icon: Briefcase },
-  { id: 3, title: 'Portfolio', icon: Image },
-  { id: 4, title: 'Collaboration', icon: Handshake },
-  { id: 5, title: 'Documents', icon: FileText },
+  { id: 2, title: 'Compte & Mot de passe', icon: Lock },
+  { id: 3, title: 'Profil professionnel', icon: Briefcase },
+  { id: 4, title: 'Portfolio', icon: Image },
+  { id: 5, title: 'Collaboration', icon: Handshake },
+  { id: 6, title: 'Documents', icon: FileText },
 ];
 
 const SPECIALTIES = [
@@ -41,8 +43,10 @@ const CATEGORIES = [
 const DesignerApplication = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { signUp } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -53,20 +57,23 @@ const DesignerApplication = () => {
     phone: '',
     wilaya: '',
     city: '',
-    // Step 2 - Professional Profile
+    // Step 2 - Account credentials
+    password: '',
+    confirmPassword: '',
+    // Step 3 - Professional Profile
     brandName: '',
     specialties: [] as string[],
     yearsExperience: '',
     bio: '',
-    // Step 3 - Portfolio
+    // Step 4 - Portfolio
     portfolioImages: [] as File[],
     portfolioUrl: '',
     targetCategories: [] as string[],
-    // Step 4 - Collaboration
+    // Step 5 - Collaboration
     interestedTextileUnits: false,
     interestedSallateBladi: false,
     desiredPercentage: '',
-    // Step 5 - Documents
+    // Step 6 - Documents
     idDocument: null as File | null,
     cvDocument: null as File | null,
   });
@@ -99,12 +106,14 @@ const DesignerApplication = () => {
       case 1:
         return formData.lastName && formData.firstName && formData.email && formData.phone && formData.wilaya;
       case 2:
-        return formData.brandName && formData.specialties.length > 0 && formData.yearsExperience;
+        return formData.password.length >= 6 && formData.password === formData.confirmPassword;
       case 3:
-        return formData.targetCategories.length > 0;
+        return formData.brandName && formData.specialties.length > 0 && formData.yearsExperience;
       case 4:
-        return true;
+        return formData.targetCategories.length > 0;
       case 5:
+        return true;
+      case 6:
         return formData.idDocument;
       default:
         return false;
@@ -125,13 +134,36 @@ const DesignerApplication = () => {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    const { error } = await signUp(
+      formData.email,
+      formData.password,
+      {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone,
+        ccpNumber: '0000000000',
+        isIndependent: true,
+        partnerCompanyId: null,
+      },
+      'designer'
+    );
+
     setIsSubmitting(false);
+
+    if (error) {
+      toast({
+        title: "Erreur",
+        description: (error as any).message || "Une erreur est survenue lors de l'inscription.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitted(true);
     toast({
-      title: "Candidature envoyée",
-      description: "Notre équipe vous contactera après validation.",
+      title: "Compte designer créé",
+      description: "Vous pouvez maintenant vous connecter avec vos identifiants.",
     });
   };
 
@@ -154,12 +186,17 @@ const DesignerApplication = () => {
               Votre demande a été envoyée avec succès
             </h1>
             <p className="text-muted-foreground mb-8">
-              Notre équipe vous contactera après validation de votre dossier. 
-              Vous recevrez un email de confirmation à l'adresse : <strong>{formData.email}</strong>
+              Votre compte designer a été créé avec succès. 
+              Vous pouvez maintenant vous connecter avec vos identifiants.
             </p>
-            <Button onClick={() => navigate('/')} className="rounded-xl">
-              Retour à l'accueil
-            </Button>
+            <div className="flex gap-3 justify-center">
+              <Button onClick={() => navigate('/connexion-client')} className="rounded-xl">
+                Se connecter
+              </Button>
+              <Button onClick={() => navigate('/')} variant="outline" className="rounded-xl">
+                Retour à l'accueil
+              </Button>
+            </div>
           </motion.div>
         </div>
         <Footer />
@@ -317,8 +354,56 @@ const DesignerApplication = () => {
                   </motion.div>
                 )}
 
-                {/* Step 2 - Professional Profile */}
+                {/* Step 2 - Account & Password */}
                 {currentStep === 2 && (
+                  <motion.div
+                    key="step2"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="space-y-6"
+                  >
+                    <h2 className="font-heading text-xl font-semibold mb-4">Créez votre compte</h2>
+                    <p className="text-sm text-muted-foreground">Ces identifiants vous permettront de vous connecter à votre espace designer.</p>
+                    <div>
+                      <Label htmlFor="reg-email">Email (pré-rempli)</Label>
+                      <Input id="reg-email" type="email" value={formData.email} disabled className="mt-1 bg-muted/20" />
+                    </div>
+                    <div>
+                      <Label htmlFor="password">Mot de passe * (min. 6 caractères)</Label>
+                      <div className="relative mt-1">
+                        <Input
+                          id="password"
+                          type={showPassword ? 'text' : 'password'}
+                          value={formData.password}
+                          onChange={(e) => updateFormData('password', e.target.value)}
+                          placeholder="Choisissez un mot de passe"
+                          className="pr-10"
+                        />
+                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="confirmPassword">Confirmer le mot de passe *</Label>
+                      <Input
+                        id="confirmPassword"
+                        type="password"
+                        value={formData.confirmPassword}
+                        onChange={(e) => updateFormData('confirmPassword', e.target.value)}
+                        placeholder="Confirmez votre mot de passe"
+                        className="mt-1"
+                      />
+                      {formData.confirmPassword && formData.password !== formData.confirmPassword && (
+                        <p className="text-sm text-destructive mt-1">Les mots de passe ne correspondent pas</p>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Step 3 - Professional Profile */}
+                {currentStep === 3 && (
                   <motion.div
                     key="step2"
                     initial={{ opacity: 0, x: 20 }}
@@ -380,8 +465,8 @@ const DesignerApplication = () => {
                   </motion.div>
                 )}
 
-                {/* Step 3 - Portfolio */}
-                {currentStep === 3 && (
+                {/* Step 4 - Portfolio */}
+                {currentStep === 4 && (
                   <motion.div
                     key="step3"
                     initial={{ opacity: 0, x: 20 }}
@@ -448,8 +533,8 @@ const DesignerApplication = () => {
                   </motion.div>
                 )}
 
-                {/* Step 4 - Collaboration */}
-                {currentStep === 4 && (
+                {/* Step 5 - Collaboration */}
+                {currentStep === 5 && (
                   <motion.div
                     key="step4"
                     initial={{ opacity: 0, x: 20 }}
@@ -512,8 +597,8 @@ const DesignerApplication = () => {
                   </motion.div>
                 )}
 
-                {/* Step 5 - Documents */}
-                {currentStep === 5 && (
+                {/* Step 6 - Documents */}
+                {currentStep === 6 && (
                   <motion.div
                     key="step5"
                     initial={{ opacity: 0, x: 20 }}
