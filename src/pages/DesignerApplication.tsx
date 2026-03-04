@@ -186,12 +186,17 @@ const DesignerApplication = () => {
               Votre demande a été envoyée avec succès
             </h1>
             <p className="text-muted-foreground mb-8">
-              Notre équipe vous contactera après validation de votre dossier. 
-              Vous recevrez un email de confirmation à l'adresse : <strong>{formData.email}</strong>
+              Votre compte designer a été créé avec succès. 
+              Vous pouvez maintenant vous connecter avec vos identifiants.
             </p>
-            <Button onClick={() => navigate('/')} className="rounded-xl">
-              Retour à l'accueil
-            </Button>
+            <div className="flex gap-3 justify-center">
+              <Button onClick={() => navigate('/connexion-client')} className="rounded-xl">
+                Se connecter
+              </Button>
+              <Button onClick={() => navigate('/')} variant="outline" className="rounded-xl">
+                Retour à l'accueil
+              </Button>
+            </div>
           </motion.div>
         </div>
         <Footer />
