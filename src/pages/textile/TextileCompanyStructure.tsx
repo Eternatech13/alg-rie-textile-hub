@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,9 @@ type Unit = typeof initialUnits[0];
 const wilayas = ["Alger", "Oran", "Constantine", "Tlemcen", "Annaba", "Sétif", "Blida", "Béjaïa"];
 const specialties = ["Textile professionnel", "Textile médical", "Textile traditionnel", "Textile technique"];
 
+const container = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
+const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } };
+
 export default function TextileCompanyStructure() {
   const [units, setUnits] = useState<Unit[]>(initialUnits);
   const [addOpen, setAddOpen] = useState(false);
@@ -30,19 +34,7 @@ export default function TextileCompanyStructure() {
 
   const handleAdd = () => {
     if (!form.name.trim()) { toast({ title: "Erreur", description: "Le nom est requis.", variant: "destructive" }); return; }
-    const newUnit: Unit = {
-      id: `unit-${Date.now()}`,
-      name: form.name,
-      location: form.location,
-      wilaya: form.wilaya,
-      specialty: form.specialty,
-      monthlyCapacity: parseInt(form.monthlyCapacity) || 5000,
-      currentLoad: 0,
-      employeeCount: parseInt(form.employeeCount) || 100,
-      status: "active",
-      productsCount: 0,
-      ordersCount: 0,
-    };
+    const newUnit: Unit = { id: `unit-${Date.now()}`, name: form.name, location: form.location, wilaya: form.wilaya, specialty: form.specialty, monthlyCapacity: parseInt(form.monthlyCapacity) || 5000, currentLoad: 0, employeeCount: parseInt(form.employeeCount) || 100, status: "active", productsCount: 0, ordersCount: 0 };
     setUnits((prev) => [...prev, newUnit]);
     setAddOpen(false);
     resetForm();
@@ -73,131 +65,105 @@ export default function TextileCompanyStructure() {
   };
 
   const renderFormFields = () => (
-    <div className="space-y-4">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="space-y-4">
       <div><Label>Nom de l'unité</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="mt-1" placeholder="Ex: Unité Sétif" /></div>
       <div><Label>Adresse</Label><Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} className="mt-1" placeholder="Ex: Zone Industrielle, Sétif" /></div>
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <Label>Wilaya</Label>
-          <Select value={form.wilaya} onValueChange={(v) => setForm({ ...form, wilaya: v })}>
-            <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
-            <SelectContent>{wilayas.map((w) => <SelectItem key={w} value={w}>{w}</SelectItem>)}</SelectContent>
-          </Select>
-        </div>
-        <div>
-          <Label>Spécialité</Label>
-          <Select value={form.specialty} onValueChange={(v) => setForm({ ...form, specialty: v })}>
-            <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
-            <SelectContent>{specialties.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
-          </Select>
-        </div>
+        <div><Label>Wilaya</Label><Select value={form.wilaya} onValueChange={(v) => setForm({ ...form, wilaya: v })}><SelectTrigger className="mt-1"><SelectValue /></SelectTrigger><SelectContent>{wilayas.map((w) => <SelectItem key={w} value={w}>{w}</SelectItem>)}</SelectContent></Select></div>
+        <div><Label>Spécialité</Label><Select value={form.specialty} onValueChange={(v) => setForm({ ...form, specialty: v })}><SelectTrigger className="mt-1"><SelectValue /></SelectTrigger><SelectContent>{specialties.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent></Select></div>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div><Label>Capacité mensuelle</Label><Input type="number" value={form.monthlyCapacity} onChange={(e) => setForm({ ...form, monthlyCapacity: e.target.value })} className="mt-1" /></div>
         <div><Label>Nombre d'employés</Label><Input type="number" value={form.employeeCount} onChange={(e) => setForm({ ...form, employeeCount: e.target.value })} className="mt-1" /></div>
       </div>
-    </div>
+    </motion.div>
   );
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <motion.div className="space-y-6" variants={container} initial="hidden" animate="show">
+      <motion.div variants={item} className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-foreground">Structure & Unités de production</h2>
         <Button onClick={() => { resetForm(); setAddOpen(true); }}><Plus className="mr-2 h-4 w-4" /> Ajouter une unité</Button>
-      </div>
+      </motion.div>
 
-      <Card className="border-primary/20 bg-primary/5">
-        <CardContent className="pt-6">
-          <div className="flex items-start gap-4">
-            <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-              <Building2 className="w-8 h-8 text-primary" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="text-xl font-bold text-foreground">{textileCompanyInfo.name}</h3>
-              <p className="text-sm text-muted-foreground mb-2">{textileCompanyInfo.type === "public" ? "Entreprise publique" : "Entreprise privée"} · Fondée en {textileCompanyInfo.foundedYear}</p>
-              <div className="flex flex-wrap gap-2">
-                {textileCompanyInfo.domains.map((d) => <Badge key={d} variant="secondary">{d}</Badge>)}
-              </div>
-              <div className="flex gap-6 mt-3 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1"><MapPin className="h-4 w-4" />{textileCompanyInfo.wilaya}</span>
-                <span className="flex items-center gap-1"><Users className="h-4 w-4" />{textileCompanyInfo.employeeCount} employés</span>
-                <span className="flex items-center gap-1"><Building2 className="h-4 w-4" />{units.length} unités</span>
+      <motion.div variants={item}>
+        <Card className="border-primary/20 bg-primary/5">
+          <CardContent className="pt-6">
+            <div className="flex items-start gap-4">
+              <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center shrink-0"><Building2 className="w-8 h-8 text-primary" /></div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-xl font-bold text-foreground">{textileCompanyInfo.name}</h3>
+                <p className="text-sm text-muted-foreground mb-2">{textileCompanyInfo.type === "public" ? "Entreprise publique" : "Entreprise privée"} · Fondée en {textileCompanyInfo.foundedYear}</p>
+                <div className="flex flex-wrap gap-2">{textileCompanyInfo.domains.map((d) => <Badge key={d} variant="secondary">{d}</Badge>)}</div>
+                <div className="flex gap-6 mt-3 text-sm text-muted-foreground">
+                  <span className="flex items-center gap-1"><MapPin className="h-4 w-4" />{textileCompanyInfo.wilaya}</span>
+                  <span className="flex items-center gap-1"><Users className="h-4 w-4" />{textileCompanyInfo.employeeCount} employés</span>
+                  <span className="flex items-center gap-1"><Building2 className="h-4 w-4" />{units.length} unités</span>
+                </div>
               </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {units.map((unit) => {
-          const loadPercent = Math.round((unit.currentLoad / unit.monthlyCapacity) * 100);
-          return (
-            <Card key={unit.id} className={unit.status === "inactive" ? "opacity-60" : ""}>
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="text-base">{unit.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1"><MapPin className="h-3 w-3" /> {unit.wilaya}</p>
-                  </div>
-                  <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(unit)}><Edit className="h-4 w-4" /></Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openToggle(unit)}><Power className="h-4 w-4" /></Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Badge variant="outline">{unit.specialty}</Badge>
-                  <Badge variant={unit.status === "active" ? "default" : "secondary"} className="ml-2">{unit.status === "active" ? "Actif" : "Inactif"}</Badge>
-                </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-1"><span className="text-muted-foreground">Capacité utilisée</span><span className="font-medium text-foreground">{loadPercent}%</span></div>
-                  <Progress value={loadPercent} className="h-2" />
-                  <p className="text-xs text-muted-foreground mt-1">{unit.currentLoad.toLocaleString()} / {unit.monthlyCapacity.toLocaleString()} unités/mois</p>
-                </div>
-                <div className="grid grid-cols-3 gap-3 pt-2 border-t border-border">
-                  <div className="text-center"><p className="text-lg font-bold text-foreground">{unit.employeeCount}</p><p className="text-xs text-muted-foreground">Employés</p></div>
-                  <div className="text-center"><p className="text-lg font-bold text-foreground">{unit.productsCount}</p><p className="text-xs text-muted-foreground">Produits</p></div>
-                  <div className="text-center"><p className="text-lg font-bold text-foreground">{unit.ordersCount}</p><p className="text-xs text-muted-foreground">Commandes</p></div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+      <motion.div variants={container} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <AnimatePresence mode="popLayout">
+          {units.map((unit) => {
+            const loadPercent = Math.round((unit.currentLoad / unit.monthlyCapacity) * 100);
+            return (
+              <motion.div key={unit.id} variants={item} layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }} whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 300, damping: 25 }}>
+                <Card className={unit.status === "inactive" ? "opacity-60" : ""}>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <div><CardTitle className="text-base">{unit.name}</CardTitle><p className="text-sm text-muted-foreground flex items-center gap-1 mt-1"><MapPin className="h-3 w-3" /> {unit.wilaya}</p></div>
+                      <div className="flex gap-1">
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(unit)}><Edit className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openToggle(unit)}><Power className="h-4 w-4" /></Button>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Badge variant="outline">{unit.specialty}</Badge>
+                      <motion.span key={unit.status} initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 500 }}>
+                        <Badge variant={unit.status === "active" ? "default" : "secondary"} className="ml-2">{unit.status === "active" ? "Actif" : "Inactif"}</Badge>
+                      </motion.span>
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-sm mb-1"><span className="text-muted-foreground">Capacité utilisée</span><span className="font-medium text-foreground">{loadPercent}%</span></div>
+                      <Progress value={loadPercent} className="h-2" />
+                      <p className="text-xs text-muted-foreground mt-1">{unit.currentLoad.toLocaleString()} / {unit.monthlyCapacity.toLocaleString()} unités/mois</p>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3 pt-2 border-t border-border">
+                      <div className="text-center"><p className="text-lg font-bold text-foreground">{unit.employeeCount}</p><p className="text-xs text-muted-foreground">Employés</p></div>
+                      <div className="text-center"><p className="text-lg font-bold text-foreground">{unit.productsCount}</p><p className="text-xs text-muted-foreground">Produits</p></div>
+                      <div className="text-center"><p className="text-lg font-bold text-foreground">{unit.ordersCount}</p><p className="text-xs text-muted-foreground">Commandes</p></div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      </motion.div>
 
-      {/* Add Dialog */}
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Ajouter une unité de production</DialogTitle></DialogHeader>
-          {renderFormFields()}
-          <DialogFooter><Button variant="outline" onClick={() => setAddOpen(false)}>Annuler</Button><Button onClick={handleAdd}>Ajouter</Button></DialogFooter>
-        </DialogContent>
+        <DialogContent>{addOpen && <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}><DialogHeader><DialogTitle>Ajouter une unité de production</DialogTitle></DialogHeader>{renderFormFields()}<DialogFooter><Button variant="outline" onClick={() => setAddOpen(false)}>Annuler</Button><Button onClick={handleAdd}>Ajouter</Button></DialogFooter></motion.div>}</DialogContent>
       </Dialog>
 
-      {/* Edit Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Modifier l'unité</DialogTitle></DialogHeader>
-          {renderFormFields()}
-          <DialogFooter><Button variant="outline" onClick={() => setEditOpen(false)}>Annuler</Button><Button onClick={handleEdit}>Enregistrer</Button></DialogFooter>
-        </DialogContent>
+        <DialogContent>{editOpen && <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}><DialogHeader><DialogTitle>Modifier l'unité</DialogTitle></DialogHeader>{renderFormFields()}<DialogFooter><Button variant="outline" onClick={() => setEditOpen(false)}>Annuler</Button><Button onClick={handleEdit}>Enregistrer</Button></DialogFooter></motion.div>}</DialogContent>
       </Dialog>
 
-      {/* Toggle Confirm */}
       <AlertDialog open={toggleOpen} onOpenChange={setToggleOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{selectedUnit?.status === "active" ? "Désactiver" : "Activer"} l'unité ?</AlertDialogTitle>
-            <AlertDialogDescription>
-              {selectedUnit?.status === "active"
-                ? `L'unité "${selectedUnit?.name}" ne pourra plus recevoir de commandes.`
-                : `L'unité "${selectedUnit?.name}" sera de nouveau opérationnelle.`}
-            </AlertDialogDescription>
+            <AlertDialogDescription>{selectedUnit?.status === "active" ? `L'unité "${selectedUnit?.name}" ne pourra plus recevoir de commandes.` : `L'unité "${selectedUnit?.name}" sera de nouveau opérationnelle.`}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter><AlertDialogCancel>Annuler</AlertDialogCancel><AlertDialogAction onClick={handleToggle}>Confirmer</AlertDialogAction></AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </motion.div>
   );
 }

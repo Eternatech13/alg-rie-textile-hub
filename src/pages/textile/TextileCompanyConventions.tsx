@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,9 @@ import { textileConventions as initialConventions } from "@/data/mockTextileComp
 import { useToast } from "@/hooks/use-toast";
 
 type Convention = typeof initialConventions[0];
+
+const container = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
+const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } };
 
 export default function TextileCompanyConventions() {
   const [conventions, setConventions] = useState<Convention[]>(initialConventions);
@@ -38,7 +42,15 @@ export default function TextileCompanyConventions() {
   const renderConvention = (conv: Convention, showActions = false) => {
     const s = statusMap[conv.status] || { label: conv.status, variant: "outline" as const };
     return (
-      <div key={conv.id} className="flex items-center justify-between p-4 rounded-lg border border-border">
+      <motion.div
+        key={conv.id}
+        layout
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 20, height: 0, marginBottom: 0, transition: { duration: 0.3 } }}
+        whileHover={{ scale: 1.01 }}
+        className="flex items-center justify-between p-4 rounded-lg border border-border"
+      >
         <div className="flex items-center gap-4">
           <Avatar className="h-12 w-12">
             <AvatarImage src={conv.designerAvatar} />
@@ -49,58 +61,65 @@ export default function TextileCompanyConventions() {
             <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
               <span className="flex items-center gap-1"><Palette className="h-3 w-3" /> {conv.designCount} designs</span>
               <span>{conv.revenueShare}% part</span>
-              {conv.totalRevenue > 0 && (
-                <span className="flex items-center gap-1"><TrendingUp className="h-3 w-3" /> {conv.totalRevenue.toLocaleString()} DA</span>
-              )}
+              {conv.totalRevenue > 0 && <span className="flex items-center gap-1"><TrendingUp className="h-3 w-3" /> {conv.totalRevenue.toLocaleString()} DA</span>}
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant={s.variant}>{s.label}</Badge>
+          <motion.span key={conv.status} initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 500 }}>
+            <Badge variant={s.variant}>{s.label}</Badge>
+          </motion.span>
           {showActions && (
-            <>
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex gap-2">
               <Button size="sm" variant="default" onClick={() => handleAccept(conv.id)}><Check className="mr-1 h-4 w-4" /> Accepter</Button>
               <Button size="sm" variant="outline" onClick={() => handleReject(conv.id)}><X className="mr-1 h-4 w-4" /> Refuser</Button>
-            </>
+            </motion.div>
           )}
         </div>
-      </div>
+      </motion.div>
     );
   };
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-foreground">Conventions & Designers</h2>
+    <motion.div className="space-y-6" variants={container} initial="hidden" animate="show">
+      <motion.h2 variants={item} className="text-2xl font-bold text-foreground">Conventions & Designers</motion.h2>
 
-      {pending.length > 0 && (
-        <Card className="border-primary/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              Demandes en attente
-              <Badge variant="destructive">{pending.length}</Badge>
-            </CardTitle>
-          </CardHeader>
+      <AnimatePresence mode="popLayout">
+        {pending.length > 0 && (
+          <motion.div variants={item} key="pending-card">
+            <Card className="border-primary/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">Demandes en attente <Badge variant="destructive">{pending.length}</Badge></CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <AnimatePresence mode="popLayout">
+                  {pending.map((c) => renderConvention(c, true))}
+                </AnimatePresence>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.div variants={item}>
+        <Card>
+          <CardHeader><CardTitle>Conventions actives ({active.length})</CardTitle></CardHeader>
           <CardContent className="space-y-3">
-            {pending.map((c) => renderConvention(c, true))}
+            <AnimatePresence mode="popLayout">
+              {active.length === 0 ? <p className="text-sm text-muted-foreground">Aucune convention active.</p> : active.map((c) => renderConvention(c))}
+            </AnimatePresence>
           </CardContent>
         </Card>
-      )}
-
-      <Card>
-        <CardHeader><CardTitle>Conventions actives ({active.length})</CardTitle></CardHeader>
-        <CardContent className="space-y-3">
-          {active.length === 0 ? <p className="text-sm text-muted-foreground">Aucune convention active.</p> : active.map((c) => renderConvention(c))}
-        </CardContent>
-      </Card>
+      </motion.div>
 
       {expired.length > 0 && (
-        <Card>
-          <CardHeader><CardTitle>Conventions expirées ({expired.length})</CardTitle></CardHeader>
-          <CardContent className="space-y-3">
-            {expired.map((c) => renderConvention(c))}
-          </CardContent>
-        </Card>
+        <motion.div variants={item}>
+          <Card>
+            <CardHeader><CardTitle>Conventions expirées ({expired.length})</CardTitle></CardHeader>
+            <CardContent className="space-y-3">{expired.map((c) => renderConvention(c))}</CardContent>
+          </Card>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 }
