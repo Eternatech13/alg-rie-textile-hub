@@ -11,7 +11,7 @@ import { useCart } from '@/contexts/CartContext';
 
 const Header = () => {
   const navigate = useNavigate();
-  const { user, profile, signOut, isAuthenticated } = useAuth();
+  const { user, profile, signOut, isAuthenticated, isDesigner } = useAuth();
   const { itemCount } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -181,6 +181,18 @@ const Header = () => {
                       <p className="text-sm font-medium">{profile?.first_name} {profile?.last_name}</p>
                       <p className="text-xs text-muted-foreground">{user?.email}</p>
                     </div>
+                    <DropdownMenuSeparator />
+                    {isDesigner && (
+                      <DropdownMenuItem onClick={() => navigate('/designer/dashboard')}>
+                        Espace Designer
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem onClick={() => navigate('/mon-compte/profil')}>
+                      Mon Compte
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/mon-compte/commandes')}>
+                      Mes Commandes
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
                       <LogOut className="mr-2 h-4 w-4" />

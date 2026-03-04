@@ -23,6 +23,8 @@ import DesignerApplication from "./pages/DesignerApplication";
 import TextileCompanyApplication from "./pages/TextileCompanyApplication";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import OrderConfirmation from "./pages/OrderConfirmation";
+import ResetPassword from "./pages/ResetPassword";
 
 // Designer Space
 import DesignerLayout from "./components/designer/DesignerLayout";
@@ -35,6 +37,17 @@ import DesignerRevenue from "./pages/designer/DesignerRevenue";
 import DesignerProfilePage from "./pages/designer/DesignerProfilePage";
 import DesignerNotifications from "./pages/designer/DesignerNotifications";
 import DesignerSettings from "./pages/designer/DesignerSettings";
+
+// Client Space
+import ClientLayout from "./components/client/ClientLayout";
+import ClientProfile from "./pages/client/ClientProfile";
+import ClientOrders from "./pages/client/ClientOrders";
+import ClientOrderDetail from "./pages/client/ClientOrderDetail";
+import ClientAddresses from "./pages/client/ClientAddresses";
+import ClientPayments from "./pages/client/ClientPayments";
+import ClientFavorites from "./pages/client/ClientFavorites";
+import ClientNotifications from "./pages/client/ClientNotifications";
+import ClientSettings from "./pages/client/ClientSettings";
 
 const queryClient = new QueryClient();
 
@@ -59,7 +72,9 @@ const App = () => (
             <Route path="/inscription-client" element={<ClientRegistration />} />
             <Route path="/connexion-client" element={<ClientLogin />} />
             <Route path="/mot-de-passe-oublie" element={<ForgotPassword />} />
+            <Route path="/reinitialiser-mot-de-passe" element={<ResetPassword />} />
             <Route path="/panier" element={<Cart />} />
+            <Route path="/commande/confirmation" element={<OrderConfirmation />} />
             <Route path="/devenir-partenaire" element={<BecomePartner />} />
             <Route path="/devenir-partenaire/designer" element={<DesignerApplication />} />
             <Route path="/devenir-partenaire/societe-textile" element={<TextileCompanyApplication />} />
@@ -76,6 +91,18 @@ const App = () => (
               <Route path="profil" element={<DesignerProfilePage />} />
               <Route path="notifications" element={<DesignerNotifications />} />
               <Route path="parametres" element={<DesignerSettings />} />
+            </Route>
+
+            {/* Client Space */}
+            <Route path="/mon-compte" element={<ClientLayout />}>
+              <Route path="profil" element={<ClientProfile />} />
+              <Route path="commandes" element={<ClientOrders />} />
+              <Route path="commandes/:id" element={<ClientOrderDetail />} />
+              <Route path="adresses" element={<ClientAddresses />} />
+              <Route path="paiements" element={<ClientPayments />} />
+              <Route path="favoris" element={<ClientFavorites />} />
+              <Route path="notifications" element={<ClientNotifications />} />
+              <Route path="parametres" element={<ClientSettings />} />
             </Route>
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
