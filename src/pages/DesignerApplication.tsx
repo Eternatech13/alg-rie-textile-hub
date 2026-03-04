@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Upload, CheckCircle, User, Briefcase, Image, Handshake, FileText, Loader2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Upload, CheckCircle, User, Briefcase, Image, Handshake, FileText, Loader2, Lock, Eye, EyeOff } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/components/ui/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 const STEPS = [
   { id: 1, title: 'Informations personnelles', icon: User },
