@@ -73,7 +73,7 @@ const DesignerApplication = () => {
     interestedTextileUnits: false,
     interestedSallateBladi: false,
     desiredPercentage: '',
-    // Step 5 - Documents
+    // Step 6 - Documents
     idDocument: null as File | null,
     cvDocument: null as File | null,
   });
