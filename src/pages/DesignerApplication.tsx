@@ -69,7 +69,7 @@ const DesignerApplication = () => {
     portfolioImages: [] as File[],
     portfolioUrl: '',
     targetCategories: [] as string[],
-    // Step 4 - Collaboration
+    // Step 5 - Collaboration
     interestedTextileUnits: false,
     interestedSallateBladi: false,
     desiredPercentage: '',
