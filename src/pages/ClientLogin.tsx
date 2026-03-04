@@ -29,7 +29,7 @@ const ClientLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
-  const { signIn, isAuthenticated, isCcpValidated, profile, loading } = useAuth();
+  const { signIn, isAuthenticated, isCcpValidated, profile, userRole, loading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCcpPending, setShowCcpPending] = useState(false);
