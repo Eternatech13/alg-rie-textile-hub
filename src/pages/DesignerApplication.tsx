@@ -43,8 +43,10 @@ const CATEGORIES = [
 const DesignerApplication = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { signUp } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [formData, setFormData] = useState({
