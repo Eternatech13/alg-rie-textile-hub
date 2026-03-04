@@ -21,37 +21,40 @@ export interface PartnerCompany {
   code: string;
 }
 
+export type AppRole = 'client' | 'designer' | 'textile_company' | 'admin';
+
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [userRole, setUserRole] = useState<AppRole | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
-    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         
-        // Defer profile fetch with setTimeout
         if (session?.user) {
           setTimeout(() => {
             fetchProfile(session.user.id);
+            fetchUserRole(session.user.id);
           }, 0);
         } else {
           setProfile(null);
+          setUserRole(null);
         }
       }
     );
 
-    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchProfile(session.user.id);
+        fetchUserRole(session.user.id);
       }
       setLoading(false);
     });
@@ -74,6 +77,21 @@ export const useAuth = () => {
     setProfile(data);
   };
 
+  const fetchUserRole = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', userId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching user role:', error);
+      return;
+    }
+
+    setUserRole(data?.role as AppRole || null);
+  };
+
   const signUp = async (
     email: string,
     password: string,
@@ -84,7 +102,8 @@ export const useAuth = () => {
       ccpNumber: string;
       isIndependent: boolean;
       partnerCompanyId: string | null;
-    }
+    },
+    role: AppRole = 'client'
   ) => {
     const redirectUrl = `${window.location.origin}/`;
     
@@ -104,8 +123,8 @@ export const useAuth = () => {
       return { error };
     }
 
-    // Create profile after signup
     if (data.user) {
+      // Create profile
       const { error: profileError } = await supabase
         .from('profiles')
         .insert({
@@ -121,6 +140,18 @@ export const useAuth = () => {
       if (profileError) {
         console.error('Error creating profile:', profileError);
         return { error: profileError };
+      }
+
+      // Assign role
+      const { error: roleError } = await supabase
+        .from('user_roles')
+        .insert({
+          user_id: data.user.id,
+          role: role,
+        });
+
+      if (roleError) {
+        console.error('Error assigning role:', roleError);
       }
     }
 
@@ -153,6 +184,7 @@ export const useAuth = () => {
     setUser(null);
     setSession(null);
     setProfile(null);
+    setUserRole(null);
     return { error: null };
   };
 
@@ -167,12 +199,15 @@ export const useAuth = () => {
     user,
     session,
     profile,
+    userRole,
     loading,
     signUp,
     signIn,
     signOut,
     resetPassword,
     isAuthenticated: !!session,
+    isDesigner: userRole === 'designer',
+    isAdmin: userRole === 'admin',
     isCcpValidated: profile?.ccp_validated ?? false,
   };
 };
