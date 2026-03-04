@@ -106,12 +106,14 @@ const DesignerApplication = () => {
       case 1:
         return formData.lastName && formData.firstName && formData.email && formData.phone && formData.wilaya;
       case 2:
-        return formData.brandName && formData.specialties.length > 0 && formData.yearsExperience;
+        return formData.password.length >= 6 && formData.password === formData.confirmPassword;
       case 3:
-        return formData.targetCategories.length > 0;
+        return formData.brandName && formData.specialties.length > 0 && formData.yearsExperience;
       case 4:
-        return true;
+        return formData.targetCategories.length > 0;
       case 5:
+        return true;
+      case 6:
         return formData.idDocument;
       default:
         return false;
