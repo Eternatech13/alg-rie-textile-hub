@@ -57,7 +57,10 @@ const DesignerApplication = () => {
     phone: '',
     wilaya: '',
     city: '',
-    // Step 2 - Professional Profile
+    // Step 2 - Account credentials
+    password: '',
+    confirmPassword: '',
+    // Step 3 - Professional Profile
     brandName: '',
     specialties: [] as string[],
     yearsExperience: '',
