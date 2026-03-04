@@ -1,22 +1,41 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Check, X, Palette, TrendingUp } from "lucide-react";
-import { textileConventions } from "@/data/mockTextileCompanyData";
+import { textileConventions as initialConventions } from "@/data/mockTextileCompanyData";
+import { useToast } from "@/hooks/use-toast";
+
+type Convention = typeof initialConventions[0];
 
 export default function TextileCompanyConventions() {
+  const [conventions, setConventions] = useState<Convention[]>(initialConventions);
+  const { toast } = useToast();
+
   const statusMap: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
     active: { label: "Active", variant: "default" },
     pending: { label: "En attente", variant: "outline" },
     expired: { label: "Expirée", variant: "secondary" },
   };
 
-  const active = textileConventions.filter((c) => c.status === "active");
-  const pending = textileConventions.filter((c) => c.status === "pending");
-  const expired = textileConventions.filter((c) => c.status === "expired");
+  const handleAccept = (id: string) => {
+    setConventions((prev) => prev.map((c) => c.id === id ? { ...c, status: "active" as const, startDate: new Date().toISOString().split("T")[0] } : c));
+    const conv = conventions.find((c) => c.id === id);
+    toast({ title: "Convention acceptée", description: `La collaboration avec ${conv?.designerName} est maintenant active.` });
+  };
 
-  const renderConvention = (conv: typeof textileConventions[0], showActions = false) => {
+  const handleReject = (id: string) => {
+    setConventions((prev) => prev.filter((c) => c.id !== id));
+    const conv = conventions.find((c) => c.id === id);
+    toast({ title: "Convention refusée", description: `La demande de ${conv?.designerName} a été refusée.` });
+  };
+
+  const active = conventions.filter((c) => c.status === "active");
+  const pending = conventions.filter((c) => c.status === "pending");
+  const expired = conventions.filter((c) => c.status === "expired");
+
+  const renderConvention = (conv: Convention, showActions = false) => {
     const s = statusMap[conv.status] || { label: conv.status, variant: "outline" as const };
     return (
       <div key={conv.id} className="flex items-center justify-between p-4 rounded-lg border border-border">
@@ -40,8 +59,8 @@ export default function TextileCompanyConventions() {
           <Badge variant={s.variant}>{s.label}</Badge>
           {showActions && (
             <>
-              <Button size="sm" variant="default"><Check className="mr-1 h-4 w-4" /> Accepter</Button>
-              <Button size="sm" variant="outline"><X className="mr-1 h-4 w-4" /> Refuser</Button>
+              <Button size="sm" variant="default" onClick={() => handleAccept(conv.id)}><Check className="mr-1 h-4 w-4" /> Accepter</Button>
+              <Button size="sm" variant="outline" onClick={() => handleReject(conv.id)}><X className="mr-1 h-4 w-4" /> Refuser</Button>
             </>
           )}
         </div>
@@ -54,7 +73,7 @@ export default function TextileCompanyConventions() {
       <h2 className="text-2xl font-bold text-foreground">Conventions & Designers</h2>
 
       {pending.length > 0 && (
-        <Card className="border-yellow-500/30">
+        <Card className="border-primary/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               Demandes en attente
@@ -70,7 +89,7 @@ export default function TextileCompanyConventions() {
       <Card>
         <CardHeader><CardTitle>Conventions actives ({active.length})</CardTitle></CardHeader>
         <CardContent className="space-y-3">
-          {active.map((c) => renderConvention(c))}
+          {active.length === 0 ? <p className="text-sm text-muted-foreground">Aucune convention active.</p> : active.map((c) => renderConvention(c))}
         </CardContent>
       </Card>
 
